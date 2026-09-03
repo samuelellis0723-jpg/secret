@@ -20,13 +20,37 @@ export function AuthProvider({ children }) {
   }, []);
 
   const login = async (email, password) => {
-    const usuarios = await apiClient.get('/usuarios');
+    let usuarios = [];
+    try {
+      usuarios = await apiClient.get('/usuarios');
+    } catch (e) {
+      // Fallback a datos locales si el servidor json-server no está corriendo en puerto 3001
+      usuarios = [
+        {
+          id: 1,
+          nombre: "Valentina Reyes",
+          email: "admin@salonsecret.cl",
+          telefono: "+56912345678",
+          password: "admin123",
+          role: "admin",
+        },
+        {
+          id: 2,
+          nombre: "Camila Fernández",
+          email: "camila.fernandez@gmail.com",
+          telefono: "+56987654321",
+          password: "client123",
+          role: "client",
+        }
+      ];
+    }
+
     const usuario = usuarios.find(
       (u) => u.email.toLowerCase() === email.toLowerCase() && u.password === password
     );
 
     if (!usuario) {
-      throw new Error('Credenciales inválidas');
+      throw new Error('Credenciales incorrectas. Verifica el correo y la contraseña.');
     }
 
     const { password: _, ...userWithoutPassword } = usuario;
@@ -34,6 +58,7 @@ export function AuthProvider({ children }) {
     localStorage.setItem('secret_user', JSON.stringify(userWithoutPassword));
     return userWithoutPassword;
   };
+
 
   const register = async (datos) => {
     const usuarios = await apiClient.get('/usuarios');

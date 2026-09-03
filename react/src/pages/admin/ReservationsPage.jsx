@@ -4,9 +4,13 @@ import { ReservationFilters } from '@components/admin/ReservationFilters';
 import { ReservationsList } from '@components/admin/ReservationsList';
 import { ReservationDetail } from '@components/admin/ReservationDetail';
 import { ConfirmRejectButtons } from '@components/admin/ConfirmRejectButtons';
+import { NewReservationModal } from '@components/admin/NewReservationModal';
+import { Button } from '@components/ui/Button';
 import { Loader } from '@components/ui/Loader';
 import { Toast } from '@components/ui/Toast';
 import adminService from '@services/adminService';
+import { exportToCSV } from '@services/exportService';
+import { Plus, Download } from 'lucide-react';
 
 export default function ReservationsPage() {
   const [citas, setCitas] = useState([]);
@@ -19,6 +23,7 @@ export default function ReservationsPage() {
   const [filtroModalidad, setFiltroModalidad] = useState('todas');
   const [busqueda, setBusqueda] = useState('');
   const [selectedId, setSelectedId] = useState(null);
+  const [isNewResModalOpen, setIsNewResModalOpen] = useState(false);
 
   const [toast, setToast] = useState({ message: '', type: 'success' });
 
@@ -90,17 +95,70 @@ export default function ReservationsPage() {
     }
   };
 
+  const handleExport = () => {
+    const dataToExport = citasFiltradas.map((c) => {
+      const cliente = getClienteById(c.clienteId);
+      const servicio = getServicioById(c.servicioId);
+      return {
+        ID: c.id,
+        Fecha: c.fecha,
+        Hora: c.hora,
+        Cliente: cliente?.nombre || '—',
+        Telefono: cliente?.telefono || '—',
+        Servicio: servicio?.nombre || '—',
+        Precio: c.precioTotal || 0,
+        Modalidad: c.modalidad,
+        Estado: c.estado,
+      };
+    });
+
+    exportToCSV(dataToExport, `reservas-secret-${new Date().toISOString().split('T')[0]}.csv`);
+    setToast({ message: 'Reporte CSV descargado con éxito', type: 'success' });
+  };
+
+
 
   return (
     <div className="admin-layout">
       <AdminSidebar />
       <div className="admin-content">
-        <div className="admin-page-header">
-          <h1 className="admin-page-title">
-            Gestión de <em>Reservas</em>
-          </h1>
-          <p className="admin-page-subtitle">Administra citas, solicitudes y atenciones del Atelier</p>
+        <div
+          className="admin-page-header"
+          style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 12 }}
+        >
+          <div>
+            <h1 className="admin-page-title">
+              Gestión de <em>Reservas</em>
+            </h1>
+            <p className="admin-page-subtitle">Administra citas, solicitudes y atenciones del Atelier</p>
+          </div>
+
+          <div style={{ display: 'flex', gap: 8 }}>
+            <Button
+              variant="secondary"
+              size="sm"
+              icon={Download}
+              onClick={handleExport}
+            >
+              Exportar CSV
+            </Button>
+            <Button
+              variant="primary"
+              size="sm"
+              icon={Plus}
+              onClick={() => setIsNewResModalOpen(true)}
+            >
+              + Nueva Reserva
+            </Button>
+          </div>
         </div>
+
+        <NewReservationModal
+          isOpen={isNewResModalOpen}
+          onClose={() => setIsNewResModalOpen(false)}
+          onReservationCreated={loadData}
+        />
+
 
         <ReservationFilters
           filtroEstado={filtroEstado}

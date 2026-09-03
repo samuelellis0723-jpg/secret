@@ -4,13 +4,17 @@ import { TodaySummary } from '@components/admin/TodaySummary';
 import { AgendaDayView } from '@components/admin/AgendaDayView';
 import { PendingRequestsWidget } from '@components/admin/PendingRequestsWidget';
 import { MiniCalendar } from '@components/admin/MiniCalendar';
+import { NewReservationModal } from '@components/admin/NewReservationModal';
+import { Button } from '@components/ui/Button';
 import { Loader } from '@components/ui/Loader';
 import adminService from '@services/adminService';
+import { Plus } from 'lucide-react';
 
 export default function AdminDashboardPage() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isNewResModalOpen, setIsNewResModalOpen] = useState(false);
 
   const fetchDashboard = async () => {
     try {
@@ -51,12 +55,33 @@ export default function AdminDashboardPage() {
     <div className="admin-layout">
       <AdminSidebar />
       <div className="admin-content">
-        <div className="admin-page-header">
-          <h1 className="admin-page-title">
-            Bienvenida, <em>Valentina</em>
-          </h1>
-          <p className="admin-page-subtitle">Resumen del día y cronograma de atención</p>
+        <div
+          className="admin-page-header"
+          style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 12 }}
+        >
+          <div>
+            <h1 className="admin-page-title">
+              Bienvenida, <em>Valentina</em>
+            </h1>
+            <p className="admin-page-subtitle">Resumen del día y cronograma de atención</p>
+          </div>
+
+          <Button
+            variant="primary"
+            size="sm"
+            icon={Plus}
+            onClick={() => setIsNewResModalOpen(true)}
+          >
+            + Nueva Reserva
+          </Button>
         </div>
+
+        <NewReservationModal
+          isOpen={isNewResModalOpen}
+          onClose={() => setIsNewResModalOpen(false)}
+          onReservationCreated={fetchDashboard}
+        />
+
 
         {loading && <Loader text="Cargando el dashboard del Atelier..." />}
 
