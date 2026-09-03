@@ -856,3 +856,393 @@
     overflow-x: auto;
   }
 }
+
+/* ── Dark Mode Components & Overrides ── */
+[data-theme="dark"], .dark-theme {
+  color-scheme: dark;
+}
+
+[data-theme="dark"] body,
+.dark-theme body {
+  background-color: #0E0D12 !important;
+  color: #FAF5EF !important;
+}
+
+[data-theme="dark"] .admin-layout,
+.dark-theme .admin-layout {
+  background-color: #0E0D12 !important;
+}
+
+[data-theme="dark"] .admin-content,
+.dark-theme .admin-content {
+  background-color: #0E0D12 !important;
+}
+
+/* Modals */
+[data-theme="dark"] .modal,
+.dark-theme .modal {
+  background: #191622 !important;
+  border-color: #292336 !important;
+  color: #FAF5EF !important;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7) !important;
+}
+
+[data-theme="dark"] .modal-header,
+.dark-theme .modal-header {
+  border-bottom-color: #292336 !important;
+  background: #15121E !important;
+}
+
+[data-theme="dark"] .modal-footer,
+.dark-theme .modal-footer {
+  border-top-color: #292336 !important;
+  background: #15121E !important;
+}
+
+[data-theme="dark"] .modal-overlay,
+.dark-theme .modal-overlay {
+  background: rgba(5, 4, 8, 0.75) !important;
+}
+
+/* Cards & Containers */
+[data-theme="dark"] .card,
+.dark-theme .card {
+  background-color: #191622 !important;
+  border-color: #292336 !important;
+  color: #FAF5EF !important;
+}
+
+[data-theme="dark"] .summary-card,
+.dark-theme .summary-card {
+  background-color: #191622 !important;
+  border-color: #292336 !important;
+  color: #FAF5EF !important;
+}
+
+/* Form Controls & Inputs */
+[data-theme="dark"] input,
+[data-theme="dark"] select,
+[data-theme="dark"] textarea,
+.dark-theme input,
+.dark-theme select,
+.dark-theme textarea {
+  background-color: #231E2E !important;
+  border-color: #382F48 !important;
+  color: #FAF5EF !important;
+}
+
+[data-theme="dark"] input:focus,
+[data-theme="dark"] select:focus,
+[data-theme="dark"] textarea:focus,
+.dark-theme input:focus,
+.dark-theme select:focus,
+.dark-theme textarea:focus {
+  border-color: #832F46 !important;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(131, 47, 70, 0.3) !important;
+}
+
+[data-theme="dark"] input::placeholder,
+[data-theme="dark"] textarea::placeholder,
+.dark-theme input::placeholder,
+.dark-theme textarea::placeholder {
+  color: #8F869A !important;
+}
+
+[data-theme="dark"] label,
+.dark-theme label {
+  color: #E5DFD7 !important;
+}
+
+/* Buttons */
+[data-theme="dark"] .btn-secondary,
+.dark-theme .btn-secondary {
+  background-color: #231E2E !important;
+  border-color: #382F48 !important;
+  color: #E5DFD7 !important;
+}
+
+[data-theme="dark"] .btn-primary,
+.dark-theme .btn-primary {
+  background-color: #832F46 !important;
+  border-color: #9C3855 !important;
+  color: #FFFFFF !important;
+}
+
+[data-theme="dark"] .btn-ghost,
+.dark-theme .btn-ghost {
+  color: #A39BB0 !important;
+}
+
+[data-theme="dark"] .btn-ghost:hover,
+.dark-theme .btn-ghost:hover {
+  background-color: #231E2E !important;
+  color: #FAF5EF !important;
+}
+
+/* Table Cards & List Rows */
+[data-theme="dark"] .table-row-card,
+.dark-theme .table-row-card {
+  background-color: #191622 !important;
+  border-bottom-color: #292336 !important;
+  color: #FAF5EF !important;
+}
+
+[data-theme="dark"] .table-row-card:hover,
+.dark-theme .table-row-card:hover {
+  background-color: #221E2E !important;
+}
+
+[data-theme="dark"] .table-row-card.row-selected,
+.dark-theme .table-row-card.row-selected {
+  background-color: #282136 !important;
+  border-left-color: #F4A5BE !important;
+}
+
+/* Filter Tabs */
+[data-theme="dark"] .filter-tab,
+.dark-theme .filter-tab {
+  color: #8F869A !important;
+  border-bottom-color: transparent !important;
+}
+
+[data-theme="dark"] .filter-tab:hover,
+.dark-theme .filter-tab:hover {
+  color: #FAF5EF !important;
+}
+
+[data-theme="dark"] .filter-tab.active,
+.dark-theme .filter-tab.active {
+  color: #FAF5EF !important;
+  border-bottom-color: #F4A5BE !important;
+}
+
+[data-theme="dark"] .filter-tab-count,
+.dark-theme .filter-tab-count {
+  background: #292336 !important;
+  color: #E5DFD7 !important;
+}
+
+[data-theme="dark"] .filter-tab.active .filter-tab-count,
+.dark-theme .filter-tab.active .filter-tab-count {
+  background: #832F46 !important;
+  color: #FFFFFF !important;
+}
+
+/* Detail Panel */
+[data-theme="dark"] .detail-panel,
+.dark-theme .detail-panel {
+  background-color: #191622 !important;
+  color: #FAF5EF !important;
+}
+
+[data-theme="dark"] .detail-section-title,
+.dark-theme .detail-section-title {
+  color: #8F869A !important;
+  border-bottom-color: #292336 !important;
+}
+
+[data-theme="dark"] .detail-label,
+.dark-theme .detail-label {
+  color: #8F869A !important;
+}
+
+[data-theme="dark"] .detail-value,
+.dark-theme .detail-value {
+  color: #FAF5EF !important;
+}
+
+[data-theme="dark"] .detail-actions,
+.dark-theme .detail-actions {
+  border-top-color: #292336 !important;
+}
+
+/* Calendar Views */
+[data-theme="dark"] .calendar-grid,
+.dark-theme .calendar-grid {
+  background: #292336 !important;
+  border-color: #292336 !important;
+}
+
+[data-theme="dark"] .calendar-day,
+.dark-theme .calendar-day {
+  background: #191622 !important;
+  color: #FAF5EF !important;
+}
+
+[data-theme="dark"] .calendar-day-header,
+.dark-theme .calendar-day-header {
+  background: #15121E !important;
+  color: #8F869A !important;
+}
+
+[data-theme="dark"] .calendar-day.other-month,
+.dark-theme .calendar-day.other-month {
+  background: #120F18 !important;
+  opacity: 0.45;
+}
+
+/* Badges */
+[data-theme="dark"] .badge-pendiente,
+.dark-theme .badge-pendiente {
+  background-color: #401B27 !important;
+  color: #F4A5BE !important;
+  border-color: #66263A !important;
+}
+
+[data-theme="dark"] .badge-confirmada,
+.dark-theme .badge-confirmada {
+  background-color: #143527 !important;
+  color: #4ADE80 !important;
+  border-color: #22573F !important;
+}
+
+[data-theme="dark"] .badge-completada,
+.dark-theme .badge-completada {
+  background-color: #1E2B25 !important;
+  color: #6EE7B7 !important;
+  border-color: #2A4839 !important;
+}
+
+[data-theme="dark"] .badge-concierge,
+[data-theme="dark"] .badge-proxima,
+.dark-theme .badge-concierge,
+.dark-theme .badge-proxima {
+  background-color: #302617 !important;
+  color: #FBBF24 !important;
+  border-color: #4D3C20 !important;
+}
+
+[data-theme="dark"] .badge-cancelada,
+.dark-theme .badge-cancelada {
+  background-color: #381C1C !important;
+  color: #F87171 !important;
+  border-color: #632A2A !important;
+}
+
+[data-theme="dark"] .badge-local,
+.dark-theme .badge-local {
+  background-color: #271E3A !important;
+  color: #C084FC !important;
+  border-color: #4C1D95 !important;
+}
+
+[data-theme="dark"] .badge-domicilio,
+.dark-theme .badge-domicilio {
+  background-color: #3A2016 !important;
+  color: #FB923C !important;
+  border-color: #7C2D12 !important;
+}
+
+/* Charts SVG & Tooltips */
+[data-theme="dark"] svg text,
+.dark-theme svg text {
+  fill: #8F869A !important;
+}
+
+[data-theme="dark"] .recharts-cartesian-grid-line,
+.dark-theme .recharts-cartesian-grid-line {
+  stroke: #292336 !important;
+}
+
+[data-theme="dark"] .recharts-default-tooltip,
+.dark-theme .recharts-default-tooltip {
+  background-color: #191622 !important;
+  border-color: #292336 !important;
+  color: #FAF5EF !important;
+}
+
+/* Layout Two Col & Lists */
+[data-theme="dark"] .layout-two-col,
+.dark-theme .layout-two-col {
+  background: #191622 !important;
+  border-color: #292336 !important;
+}
+
+[data-theme="dark"] .layout-two-col-list,
+.dark-theme .layout-two-col-list {
+  border-right-color: #292336 !important;
+  background: #191622 !important;
+}
+
+[data-theme="dark"] .layout-two-col-detail,
+.dark-theme .layout-two-col-detail {
+  background: #15121E !important;
+}
+
+[data-theme="dark"] .filter-tabs,
+.dark-theme .filter-tabs {
+  background: #15121E !important;
+  border-bottom-color: #292336 !important;
+}
+
+[data-theme="dark"] .empty-state,
+.dark-theme .empty-state {
+  color: #8F869A !important;
+}
+
+[data-theme="dark"] .empty-state-title,
+.dark-theme .empty-state-title {
+  color: #FAF5EF !important;
+}
+
+/* Calendar Month View Cells Dark Theme */
+[data-theme="dark"] .calendar-grid,
+.dark-theme .calendar-grid {
+  background: #292336 !important;
+  border-color: #292336 !important;
+}
+
+[data-theme="dark"] .calendar-header-cell,
+.dark-theme .calendar-header-cell {
+  background: #15121E !important;
+  color: #8F869A !important;
+}
+
+[data-theme="dark"] .calendar-cell,
+.dark-theme .calendar-cell {
+  background: #191622 !important;
+  color: #FAF5EF !important;
+}
+
+[data-theme="dark"] .calendar-cell:hover,
+.dark-theme .calendar-cell:hover {
+  background: #231E2E !important;
+}
+
+[data-theme="dark"] .calendar-cell.other-month,
+.dark-theme .calendar-cell.other-month {
+  background: #120F18 !important;
+  opacity: 0.45;
+}
+
+[data-theme="dark"] .calendar-cell-day,
+.dark-theme .calendar-cell-day {
+  color: #FAF5EF !important;
+}
+
+[data-theme="dark"] .calendar-cell-day.today,
+.dark-theme .calendar-cell-day.today {
+  background: #832F46 !important;
+  color: #FFFFFF !important;
+}
+
+/* Donut Chart Center Hole Dark Theme */
+[data-theme="dark"] .donut-chart-center,
+.dark-theme .donut-chart-center {
+  background: #191622 !important;
+}
+
+[data-theme="dark"] .donut-chart-value,
+.dark-theme .donut-chart-value {
+  color: #FAF5EF !important;
+}
+
+[data-theme="dark"] .donut-chart-label,
+.dark-theme .donut-chart-label {
+  color: #8F869A !important;
+}
+
+
+
+

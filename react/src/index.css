@@ -14,31 +14,25 @@
   --color-light-muted: #9C9589;
 
   /* Badges Atelier Status */
-  /* Pendiente / En Curso -> Terracota Suave */
   --color-pending-bg: #FDF2E9;
   --color-pending-text: #B05B2B;
   --color-pending-border: #F7D8C5;
 
-  /* Confirmada -> Verde Suave */
   --color-confirmed-bg: #EDF7F2;
   --color-confirmed-text: #15803D;
   --color-confirmed-border: #86EFAC;
 
-  /* Completada -> Verde Menta */
   --color-completed-bg: #EBF5EE;
   --color-completed-text: #2D5A3F;
   --color-completed-border: #D1E7D7;
 
-  /* Próxima / Concierge -> Durazno / Beige */
   --color-concierge-bg: #FDF8EC;
   --color-concierge-text: #9A7B38;
   --color-concierge-border: #EEDC9A;
 
-  /* Cancelada -> Rosa Muted */
   --color-cancelled-bg: #FDF2F2;
   --color-cancelled-text: #9E3A3A;
   --color-cancelled-border: #F7CACA;
-
 
   --font-serif: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
@@ -55,6 +49,44 @@
 
   --transition-fast: 150ms ease;
   --transition-base: 250ms ease;
+}
+
+[data-theme="dark"], .dark-theme {
+  --color-ivory: #0E0D12;
+  --color-cream: #14121A;
+  --color-linen: #191622;
+  --color-sand: #292336;
+  --color-champagne: #4D405B;
+  --color-warm-gray: #8F869A;
+  --color-charcoal: #FAF5EF;
+  --color-ash: #E5DFD7;
+  --color-muted: #A39BB0;
+  --color-light-muted: #837A91;
+
+  --color-pending-bg: #401B27;
+  --color-pending-text: #F4A5BE;
+  --color-pending-border: #66263A;
+
+  --color-confirmed-bg: #143527;
+  --color-confirmed-text: #4ADE80;
+  --color-confirmed-border: #22573F;
+
+  --color-completed-bg: #1E2B25;
+  --color-completed-text: #6EE7B7;
+  --color-completed-border: #2A4839;
+
+  --color-concierge-bg: #302617;
+  --color-concierge-text: #FBBF24;
+  --color-concierge-border: #4D3C20;
+
+  --color-cancelled-bg: #381C1C;
+  --color-cancelled-text: #F87171;
+  --color-cancelled-border: #632A2A;
+
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 8px 16px rgba(0, 0, 0, 0.6);
+  --shadow-lg: 0 16px 32px rgba(0, 0, 0, 0.7);
 }
 
 *,

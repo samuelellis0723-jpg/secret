@@ -1,14 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Bell, Check, X, Calendar, Clock, AlertCircle, Sparkles, CheckCheck, ChevronRight } from 'lucide-react';
+import { Bell, Check, X, Calendar, Clock, Sparkles, CheckCheck, ChevronRight } from 'lucide-react';
+import { useTheme } from '@context/ThemeContext';
 import adminService from '@services/adminService';
 
 export function NotificationsModal({ isOpen, onClose, onRefreshData }) {
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
+
   const [citas, setCitas] = useState([]);
   const [usuarios, setUsuarios] = useState([]);
   const [servicios, setServicios] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [filterTab, setFilterTab] = useState('todas'); // 'todas' | 'pendientes'
+  const [filterTab, setFilterTab] = useState('todas');
   const [readIds, setReadIds] = useState(new Set());
   const navigate = useNavigate();
 
@@ -19,7 +23,6 @@ export function NotificationsModal({ isOpen, onClose, onRefreshData }) {
   }, [isOpen]);
 
   useEffect(() => {
-    // Esc key
     const handleKeyDown = (e) => {
       if (e.key === 'Escape' && isOpen) onClose();
     };
@@ -67,7 +70,6 @@ export function NotificationsModal({ isOpen, onClose, onRefreshData }) {
 
   if (!isOpen) return null;
 
-  // Build notifications array
   const todayStr = new Date().toISOString().split('T')[0];
 
   const pendingNotifs = citas
@@ -126,6 +128,13 @@ export function NotificationsModal({ isOpen, onClose, onRefreshData }) {
 
   const unreadCount = allNotifs.filter((n) => !n.isRead).length;
 
+  const cardBg = isDark ? '#191622' : '#FFFFFF';
+  const cardBorder = isDark ? '#292336' : '#EAE5DC';
+  const headerBg = isDark ? '#15121E' : '#FAF8F5';
+  const textPrimary = isDark ? '#FAF5EF' : '#0D0D0D';
+  const textMuted = isDark ? '#8F869A' : '#8C857B';
+  const subtextColor = isDark ? '#A39BB0' : '#6B6560';
+
   return (
     <div
       style={{
@@ -134,8 +143,8 @@ export function NotificationsModal({ isOpen, onClose, onRefreshData }) {
         left: 0,
         right: 0,
         bottom: 0,
-        backgroundColor: 'rgba(13, 13, 13, 0.45)',
-        backdropFilter: 'blur(3px)',
+        backgroundColor: isDark ? 'rgba(5, 4, 8, 0.75)' : 'rgba(13, 13, 13, 0.45)',
+        backdropFilter: 'blur(4px)',
         zIndex: 9999,
         display: 'flex',
         alignItems: 'flex-start',
@@ -149,10 +158,10 @@ export function NotificationsModal({ isOpen, onClose, onRefreshData }) {
         style={{
           width: '100%',
           maxWidth: '440px',
-          background: '#FFFFFF',
+          background: cardBg,
           borderRadius: '16px',
-          boxShadow: '0 16px 36px rgba(0, 0, 0, 0.16)',
-          border: '1px solid #EAE5DC',
+          boxShadow: isDark ? '0 16px 40px rgba(0, 0, 0, 0.6)' : '0 16px 36px rgba(0, 0, 0, 0.16)',
+          border: `1px solid ${cardBorder}`,
           overflow: 'hidden',
           display: 'flex',
           flexDirection: 'column',
@@ -164,16 +173,16 @@ export function NotificationsModal({ isOpen, onClose, onRefreshData }) {
         <div
           style={{
             padding: '16px 20px',
-            borderBottom: '1px solid #EAE5DC',
+            borderBottom: `1px solid ${cardBorder}`,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            background: '#FAF8F5',
+            background: headerBg,
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <div style={{ position: 'relative' }}>
-              <Bell size={18} color="#2B2623" />
+              <Bell size={18} color={isDark ? '#F4A5BE' : '#2B2623'} />
               {unreadCount > 0 && (
                 <span
                   style={{
@@ -183,12 +192,12 @@ export function NotificationsModal({ isOpen, onClose, onRefreshData }) {
                     width: 8,
                     height: 8,
                     borderRadius: '50%',
-                    background: '#B05B2B',
+                    background: isDark ? '#F4A5BE' : '#B05B2B',
                   }}
                 />
               )}
             </div>
-            <h3 style={{ margin: 0, fontSize: '15px', fontWeight: 600, color: '#0D0D0D', fontFamily: 'var(--font-serif)' }}>
+            <h3 style={{ margin: 0, fontSize: '15px', fontWeight: 600, color: textPrimary, fontFamily: 'var(--font-serif)' }}>
               Notificaciones del Atelier
             </h3>
           </div>
@@ -197,7 +206,7 @@ export function NotificationsModal({ isOpen, onClose, onRefreshData }) {
             onClick={onClose}
             style={{ border: 'none', background: 'transparent', cursor: 'pointer', padding: 4, display: 'flex', alignItems: 'center' }}
           >
-            <X size={16} color="#8C857B" />
+            <X size={16} color={textMuted} />
           </button>
         </div>
 
@@ -208,8 +217,9 @@ export function NotificationsModal({ isOpen, onClose, onRefreshData }) {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            borderBottom: '1px solid #EAE5DC',
+            borderBottom: `1px solid ${cardBorder}`,
             fontSize: '12px',
+            background: isDark ? '#171421' : '#FFFFFF',
           }}
         >
           <div style={{ display: 'flex', gap: 8 }}>
@@ -217,8 +227,8 @@ export function NotificationsModal({ isOpen, onClose, onRefreshData }) {
               onClick={() => setFilterTab('todas')}
               style={{
                 border: 'none',
-                background: filterTab === 'todas' ? '#1A1817' : 'transparent',
-                color: filterTab === 'todas' ? '#FFFFFF' : '#6B6560',
+                background: filterTab === 'todas' ? (isDark ? '#832F46' : '#1A1817') : 'transparent',
+                color: filterTab === 'todas' ? '#FFFFFF' : textMuted,
                 padding: '4px 10px',
                 borderRadius: '14px',
                 fontSize: '11px',
@@ -232,8 +242,8 @@ export function NotificationsModal({ isOpen, onClose, onRefreshData }) {
               onClick={() => setFilterTab('pendientes')}
               style={{
                 border: 'none',
-                background: filterTab === 'pendientes' ? '#1A1817' : 'transparent',
-                color: filterTab === 'pendientes' ? '#FFFFFF' : '#6B6560',
+                background: filterTab === 'pendientes' ? (isDark ? '#832F46' : '#1A1817') : 'transparent',
+                color: filterTab === 'pendientes' ? '#FFFFFF' : textMuted,
                 padding: '4px 10px',
                 borderRadius: '14px',
                 fontSize: '11px',
@@ -250,7 +260,7 @@ export function NotificationsModal({ isOpen, onClose, onRefreshData }) {
             style={{
               border: 'none',
               background: 'transparent',
-              color: '#B05B2B',
+              color: isDark ? '#F4A5BE' : '#B05B2B',
               fontSize: '11px',
               fontWeight: 600,
               cursor: 'pointer',
@@ -266,128 +276,140 @@ export function NotificationsModal({ isOpen, onClose, onRefreshData }) {
         {/* Notification List */}
         <div style={{ flex: 1, overflowY: 'auto', padding: '12px 16px' }}>
           {loading && (
-            <div style={{ padding: '24px', textAlign: 'center', color: '#8C857B', fontSize: '13px' }}>
+            <div style={{ padding: '24px', textAlign: 'center', color: textMuted, fontSize: '13px' }}>
               Cargando notificaciones...
             </div>
           )}
 
           {!loading && allNotifs.length === 0 && (
             <div style={{ padding: '36px 20px', textAlign: 'center' }}>
-              <Bell size={28} color="#C4BFB5" style={{ marginBottom: 8 }} />
-              <div style={{ fontSize: '13px', color: '#8C857B' }}>No tienes notificaciones pendientes</div>
+              <Bell size={28} color={isDark ? '#4D435C' : '#C4BFB5'} style={{ marginBottom: 8 }} />
+              <div style={{ fontSize: '13px', color: textMuted }}>No tienes notificaciones pendientes</div>
             </div>
           )}
 
           {!loading &&
-            allNotifs.map((notif) => (
-              <div
-                key={notif.id}
-                onClick={() => {
-                  markSingleRead(notif.id);
-                  if (notif.citaId) navigate('/admin/reservas');
-                  onClose();
-                }}
-                style={{
-                  padding: '12px 14px',
-                  borderRadius: '12px',
-                  marginBottom: '8px',
-                  background: notif.isRead ? '#FAF8F5' : '#FFFFFF',
-                  border: notif.isRead ? '1px solid #EAE5DC' : '1px solid #E5D5C5',
-                  cursor: 'pointer',
-                  boxShadow: notif.isRead ? 'none' : '0 2px 8px rgba(176, 91, 43, 0.06)',
-                  transition: 'all 0.15s ease',
-                  position: 'relative',
-                }}
-              >
-                {!notif.isRead && (
-                  <span
-                    style={{
-                      position: 'absolute',
-                      top: 12,
-                      right: 12,
-                      width: 6,
-                      height: 6,
-                      borderRadius: '50%',
-                      background: '#B05B2B',
-                    }}
-                  />
-                )}
+            allNotifs.map((notif) => {
+              const itemBg = notif.isRead
+                ? (isDark ? '#181423' : '#FAF8F5')
+                : (isDark ? '#231E2E' : '#FFFFFF');
 
-                <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
-                  <div
-                    style={{
-                      width: 32,
-                      height: 32,
-                      borderRadius: '50%',
-                      background: notif.type === 'pending_request' ? '#FFF5EE' : '#F4F4F0',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      flexShrink: 0,
-                    }}
-                  >
-                    {notif.type === 'pending_request' ? (
-                      <Clock size={16} color="#B05B2B" />
-                    ) : notif.type === 'today_appointment' ? (
-                      <Calendar size={16} color="#2B2623" />
-                    ) : (
-                      <Sparkles size={16} color="#6B6560" />
-                    )}
-                  </div>
+              const itemBorderColor = notif.isRead
+                ? (isDark ? '#262035' : '#EAE5DC')
+                : (isDark ? '#3E2E44' : '#E5D5C5');
 
-                  <div style={{ flex: 1 }}>
-                    <div style={{ fontSize: '12px', fontWeight: 600, color: '#0D0D0D', marginBottom: 2 }}>
-                      {notif.title}
+              return (
+                <div
+                  key={notif.id}
+                  onClick={() => {
+                    markSingleRead(notif.id);
+                    if (notif.citaId) navigate('/admin/reservas');
+                    onClose();
+                  }}
+                  style={{
+                    padding: '12px 14px',
+                    borderRadius: '12px',
+                    marginBottom: '8px',
+                    background: itemBg,
+                    border: `1px solid ${itemBorderColor}`,
+                    cursor: 'pointer',
+                    boxShadow: notif.isRead ? 'none' : (isDark ? '0 4px 12px rgba(131, 47, 70, 0.15)' : '0 2px 8px rgba(176, 91, 43, 0.06)'),
+                    transition: 'all 0.15s ease',
+                    position: 'relative',
+                  }}
+                >
+                  {!notif.isRead && (
+                    <span
+                      style={{
+                        position: 'absolute',
+                        top: 12,
+                        right: 12,
+                        width: 6,
+                        height: 6,
+                        borderRadius: '50%',
+                        background: isDark ? '#F4A5BE' : '#B05B2B',
+                      }}
+                    />
+                  )}
+
+                  <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
+                    <div
+                      style={{
+                        width: 32,
+                        height: 32,
+                        borderRadius: '50%',
+                        background: notif.type === 'pending_request'
+                          ? (isDark ? '#3D1C28' : '#FFF5EE')
+                          : (isDark ? '#262133' : '#F4F4F0'),
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        flexShrink: 0,
+                      }}
+                    >
+                      {notif.type === 'pending_request' ? (
+                        <Clock size={16} color={isDark ? '#F4A5BE' : '#B05B2B'} />
+                      ) : notif.type === 'today_appointment' ? (
+                        <Calendar size={16} color={textPrimary} />
+                      ) : (
+                        <Sparkles size={16} color={textMuted} />
+                      )}
                     </div>
-                    <div style={{ fontSize: '11px', color: '#6B6560', lineHeight: 1.4 }}>
-                      {notif.description}
-                    </div>
 
-                    {/* Action buttons for pending request */}
-                    {notif.type === 'pending_request' && notif.estado === 'pendiente' && (
-                      <div style={{ display: 'flex', gap: 8, marginTop: 10 }}>
-                        <button
-                          onClick={(e) => handleUpdateEstado(notif.citaId, 'confirmada', e)}
-                          style={{
-                            border: 'none',
-                            background: '#1A1817',
-                            color: '#FFFFFF',
-                            padding: '4px 12px',
-                            borderRadius: '6px',
-                            fontSize: '11px',
-                            fontWeight: 600,
-                            cursor: 'pointer',
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: 4,
-                          }}
-                        >
-                          <Check size={12} /> Confirmar
-                        </button>
-                        <button
-                          onClick={(e) => handleUpdateEstado(notif.citaId, 'cancelada', e)}
-                          style={{
-                            border: '1px solid #EAE5DC',
-                            background: '#FFFFFF',
-                            color: '#7A756D',
-                            padding: '4px 12px',
-                            borderRadius: '6px',
-                            fontSize: '11px',
-                            fontWeight: 500,
-                            cursor: 'pointer',
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: 4,
-                          }}
-                        >
-                          <X size={12} /> Rechazar
-                        </button>
+                    <div style={{ flex: 1 }}>
+                      <div style={{ fontSize: '12px', fontWeight: 600, color: textPrimary, marginBottom: 2 }}>
+                        {notif.title}
                       </div>
-                    )}
+                      <div style={{ fontSize: '11px', color: subtextColor, lineHeight: 1.4 }}>
+                        {notif.description}
+                      </div>
+
+                      {/* Action buttons for pending request */}
+                      {notif.type === 'pending_request' && notif.estado === 'pendiente' && (
+                        <div style={{ display: 'flex', gap: 8, marginTop: 10 }}>
+                          <button
+                            onClick={(e) => handleUpdateEstado(notif.citaId, 'confirmada', e)}
+                            style={{
+                              border: 'none',
+                              background: isDark ? '#832F46' : '#1A1817',
+                              color: '#FFFFFF',
+                              padding: '4px 12px',
+                              borderRadius: '6px',
+                              fontSize: '11px',
+                              fontWeight: 600,
+                              cursor: 'pointer',
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: 4,
+                            }}
+                          >
+                            <Check size={12} /> Confirmar
+                          </button>
+                          <button
+                            onClick={(e) => handleUpdateEstado(notif.citaId, 'cancelada', e)}
+                            style={{
+                              border: `1px solid ${isDark ? '#382F48' : '#EAE5DC'}`,
+                              background: isDark ? '#231F2E' : '#FFFFFF',
+                              color: isDark ? '#A39BB0' : '#7A756D',
+                              padding: '4px 12px',
+                              borderRadius: '6px',
+                              fontSize: '11px',
+                              fontWeight: 500,
+                              cursor: 'pointer',
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: 4,
+                            }}
+                          >
+                            <X size={12} /> Rechazar
+                          </button>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
         </div>
 
         {/* Footer */}
@@ -398,12 +420,12 @@ export function NotificationsModal({ isOpen, onClose, onRefreshData }) {
           }}
           style={{
             padding: '12px 20px',
-            background: '#FAF8F5',
-            borderTop: '1px solid #EAE5DC',
+            background: headerBg,
+            borderTop: `1px solid ${cardBorder}`,
             textAlign: 'center',
             fontSize: '12px',
             fontWeight: 600,
-            color: '#B05B2B',
+            color: isDark ? '#F4A5BE' : '#B05B2B',
             cursor: 'pointer',
             display: 'flex',
             alignItems: 'center',
