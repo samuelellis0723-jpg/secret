@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { AdminSidebar } from '@components/admin/AdminSidebar';
+import { AdminHeader } from '@components/admin/AdminHeader';
 import { ClientSearch } from '@components/admin/ClientSearch';
 import { ClientList } from '@components/admin/ClientList';
 import { ClientHistory } from '@components/admin/ClientHistory';
@@ -36,6 +37,7 @@ export default function ClientsPage() {
     <div className="admin-layout">
       <AdminSidebar />
       <div className="admin-content">
+        <AdminHeader sectionTitle="DIRECTORIO DE CLIENTES" />
         <div className="admin-page-header">
           <h1 className="admin-page-title">
             Registro de <em>Clientes</em>

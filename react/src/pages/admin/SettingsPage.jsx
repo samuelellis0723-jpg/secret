@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { AdminSidebar } from '@components/admin/AdminSidebar';
+import { AdminHeader } from '@components/admin/AdminHeader';
 import { Button } from '@components/ui/Button';
 import { Loader } from '@components/ui/Loader';
 import { Toast } from '@components/ui/Toast';
@@ -52,6 +53,7 @@ export default function SettingsPage() {
     <div className="admin-layout" style={{ background: '#FAF8F5' }}>
       <AdminSidebar />
       <div className="admin-content" style={{ padding: '24px 40px 60px' }}>
+        <AdminHeader sectionTitle="CONFIGURACIÓN DEL ATELIER" />
         <div className="admin-page-header">
           <h1 className="admin-page-title">
             <em>Ajustes</em> del Atelier

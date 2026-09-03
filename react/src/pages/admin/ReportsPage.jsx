@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { AdminSidebar } from '@components/admin/AdminSidebar';
+import { AdminHeader } from '@components/admin/AdminHeader';
 import { TopServicesChart } from '@components/admin/TopServicesChart';
 import { LocalVsDomicilioChart } from '@components/admin/LocalVsDomicilioChart';
 import { DemandChart } from '@components/admin/DemandChart';
@@ -40,6 +41,7 @@ export default function ReportsPage() {
     <div className="admin-layout">
       <AdminSidebar />
       <div className="admin-content">
+        <AdminHeader sectionTitle="REPORTES Y MÉTRICAS" />
         <div
           className="admin-page-header"
           style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 12 }}

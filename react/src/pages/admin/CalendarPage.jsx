@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { AdminSidebar } from '@components/admin/AdminSidebar';
+import { AdminHeader } from '@components/admin/AdminHeader';
 import { MonthView } from '@components/admin/MonthView';
 import { WeekView } from '@components/admin/WeekView';
 import { BlockUnavailableModal } from '@components/admin/BlockUnavailableModal';
@@ -75,6 +76,7 @@ export default function CalendarPage() {
     <div className="admin-layout">
       <AdminSidebar />
       <div className="admin-content">
+        <AdminHeader sectionTitle="CALENDARIO Y AGENDA" onRefreshData={loadCalendarData} />
         <div
           className="admin-page-header"
           style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 12 }}
