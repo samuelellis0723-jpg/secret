@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search, User, Calendar, Settings, FileText, LayoutDashboard, ChevronRight, X, Clock, ArrowRight } from 'lucide-react';
+import { useTheme } from '@context/ThemeContext';
 import adminService from '@services/adminService';
 
 const ADMIN_SECTIONS = [
@@ -13,6 +14,9 @@ const ADMIN_SECTIONS = [
 ];
 
 export function GlobalSearchModal({ isOpen, onClose, onSelectReservation }) {
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
+
   const [query, setQuery] = useState('');
   const [clientes, setClientes] = useState([]);
   const [citas, setCitas] = useState([]);
@@ -30,7 +34,6 @@ export function GlobalSearchModal({ isOpen, onClose, onSelectReservation }) {
     }
   }, [isOpen]);
 
-  // Keybindings ESC to close
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === 'Escape' && isOpen) {
@@ -63,12 +66,10 @@ export function GlobalSearchModal({ isOpen, onClose, onSelectReservation }) {
 
   const lowerQuery = query.trim().toLowerCase();
 
-  // Filter sections
   const filteredSections = ADMIN_SECTIONS.filter(s =>
     s.name.toLowerCase().includes(lowerQuery)
   );
 
-  // Filter clients
   const filteredClientes = lowerQuery
     ? clientes.filter(c =>
         (c.nombre && c.nombre.toLowerCase().includes(lowerQuery)) ||
@@ -77,7 +78,6 @@ export function GlobalSearchModal({ isOpen, onClose, onSelectReservation }) {
       ).slice(0, 5)
     : [];
 
-  // Filter citas
   const filteredCitas = lowerQuery
     ? citas.filter(c => {
         const cliente = clientes.find(u => u.id === c.clienteId);
@@ -111,6 +111,14 @@ export function GlobalSearchModal({ isOpen, onClose, onSelectReservation }) {
 
   const hasResults = filteredSections.length > 0 || filteredClientes.length > 0 || filteredCitas.length > 0;
 
+  const cardBg = isDark ? '#191622' : '#FFFFFF';
+  const cardBorder = isDark ? '#292336' : '#EAE5DC';
+  const textPrimary = isDark ? '#FAF5EF' : '#0D0D0D';
+  const textMuted = isDark ? '#8F869A' : '#8C857B';
+  const hoverBg = isDark ? '#262035' : '#F9F7F2';
+  const iconBoxBg = isDark ? '#231E2E' : '#F2EFE9';
+  const iconColor = isDark ? '#F4A5BE' : '#6B6560';
+
   return (
     <div
       style={{
@@ -119,7 +127,7 @@ export function GlobalSearchModal({ isOpen, onClose, onSelectReservation }) {
         left: 0,
         right: 0,
         bottom: 0,
-        backgroundColor: 'rgba(13, 13, 13, 0.55)',
+        backgroundColor: isDark ? 'rgba(5, 4, 8, 0.75)' : 'rgba(13, 13, 13, 0.55)',
         backdropFilter: 'blur(4px)',
         zIndex: 9999,
         display: 'flex',
@@ -134,17 +142,17 @@ export function GlobalSearchModal({ isOpen, onClose, onSelectReservation }) {
         style={{
           width: '100%',
           maxWidth: '640px',
-          background: '#FFFFFF',
+          background: cardBg,
           borderRadius: '16px',
-          boxShadow: '0 20px 40px rgba(0, 0, 0, 0.18)',
-          border: '1px solid #EAE5DC',
+          boxShadow: isDark ? '0 20px 50px rgba(0, 0, 0, 0.7)' : '0 20px 40px rgba(0, 0, 0, 0.18)',
+          border: `1px solid ${cardBorder}`,
           overflow: 'hidden',
         }}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Search Header Input */}
-        <div style={{ display: 'flex', alignItems: 'center', padding: '16px 20px', borderBottom: '1px solid #EAE5DC', gap: 12 }}>
-          <Search size={20} color="#8C857B" />
+        <div style={{ display: 'flex', alignItems: 'center', padding: '16px 20px', borderBottom: `1px solid ${cardBorder}`, gap: 12 }}>
+          <Search size={20} color={textMuted} />
           <input
             ref={inputRef}
             type="text"
@@ -157,7 +165,7 @@ export function GlobalSearchModal({ isOpen, onClose, onSelectReservation }) {
               outline: 'none',
               fontSize: '15px',
               fontFamily: 'var(--font-sans)',
-              color: '#0D0D0D',
+              color: textPrimary,
               background: 'transparent',
             }}
           />
@@ -166,10 +174,10 @@ export function GlobalSearchModal({ isOpen, onClose, onSelectReservation }) {
               onClick={() => setQuery('')}
               style={{ border: 'none', background: 'transparent', cursor: 'pointer', padding: 4, display: 'flex', alignItems: 'center' }}
             >
-              <X size={16} color="#A39E93" />
+              <X size={16} color={textMuted} />
             </button>
           )}
-          <span style={{ fontSize: '10px', fontWeight: 600, padding: '3px 8px', borderRadius: '4px', background: '#F5F2EC', color: '#8C857B', border: '1px solid #EAE5DC' }}>
+          <span style={{ fontSize: '10px', fontWeight: 600, padding: '3px 8px', borderRadius: '4px', background: isDark ? '#231E2E' : '#F5F2EC', color: textMuted, border: `1px solid ${cardBorder}` }}>
             ESC
           </span>
         </div>
@@ -177,14 +185,14 @@ export function GlobalSearchModal({ isOpen, onClose, onSelectReservation }) {
         {/* Results Body */}
         <div style={{ maxHeight: '420px', overflowY: 'auto', padding: '12px 16px' }}>
           {loading && (
-            <div style={{ padding: '24px', textAlign: 'center', color: '#8C857B', fontSize: '13px' }}>
+            <div style={{ padding: '24px', textAlign: 'center', color: textMuted, fontSize: '13px' }}>
               Buscando en el atelier...
             </div>
           )}
 
           {!loading && !query && (
             <div>
-              <div style={{ fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.15em', color: '#A39E93', fontWeight: 700, padding: '8px 12px' }}>
+              <div style={{ fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.15em', color: isDark ? '#F4A5BE' : '#A39E93', fontWeight: 700, padding: '8px 12px' }}>
                 Acceso Rápido a Secciones
               </div>
               {ADMIN_SECTIONS.map((sec) => {
@@ -202,16 +210,16 @@ export function GlobalSearchModal({ isOpen, onClose, onSelectReservation }) {
                       cursor: 'pointer',
                       transition: 'background 0.15s ease',
                     }}
-                    onMouseEnter={(e) => (e.currentTarget.style.background = '#F9F7F2')}
+                    onMouseEnter={(e) => (e.currentTarget.style.background = hoverBg)}
                     onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
                   >
                     <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                      <div style={{ width: 32, height: 32, borderRadius: '8px', background: '#F2EFE9', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <IconComponent size={16} color="#6B6560" />
+                      <div style={{ width: 32, height: 32, borderRadius: '8px', background: iconBoxBg, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <IconComponent size={16} color={iconColor} />
                       </div>
-                      <span style={{ fontSize: '13px', fontWeight: 500, color: '#2B2623' }}>{sec.name}</span>
+                      <span style={{ fontSize: '13px', fontWeight: 500, color: textPrimary }}>{sec.name}</span>
                     </div>
-                    <ArrowRight size={14} color="#C4BFB5" />
+                    <ArrowRight size={14} color={textMuted} />
                   </div>
                 );
               })}
@@ -220,9 +228,9 @@ export function GlobalSearchModal({ isOpen, onClose, onSelectReservation }) {
 
           {!loading && query && !hasResults && (
             <div style={{ padding: '36px 20px', textAlign: 'center' }}>
-              <Search size={32} color="#C4BFB5" style={{ marginBottom: 12 }} />
-              <div style={{ fontSize: '14px', fontWeight: 500, color: '#2B2623' }}>Sin resultados encontrados</div>
-              <div style={{ fontSize: '12px', color: '#A39E93', marginTop: 4 }}>
+              <Search size={32} color={isDark ? '#4D435C' : '#C4BFB5'} style={{ marginBottom: 12 }} />
+              <div style={{ fontSize: '14px', fontWeight: 500, color: textPrimary }}>Sin resultados encontrados</div>
+              <div style={{ fontSize: '12px', color: textMuted, marginTop: 4 }}>
                 No encontramos coincidencias para "{query}"
               </div>
             </div>
@@ -233,7 +241,7 @@ export function GlobalSearchModal({ isOpen, onClose, onSelectReservation }) {
               {/* Clientes */}
               {filteredClientes.length > 0 && (
                 <div style={{ marginBottom: 16 }}>
-                  <div style={{ fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.15em', color: '#B05B2B', fontWeight: 700, padding: '6px 12px' }}>
+                  <div style={{ fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.15em', color: isDark ? '#F4A5BE' : '#B05B2B', fontWeight: 700, padding: '6px 12px' }}>
                     Clientes ({filteredClientes.length})
                   </div>
                   {filteredClientes.map((c) => (
@@ -248,16 +256,16 @@ export function GlobalSearchModal({ isOpen, onClose, onSelectReservation }) {
                         borderRadius: '8px',
                         cursor: 'pointer',
                       }}
-                      onMouseEnter={(e) => (e.currentTarget.style.background = '#F9F7F2')}
+                      onMouseEnter={(e) => (e.currentTarget.style.background = hoverBg)}
                       onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
                     >
                       <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                        <div style={{ width: 32, height: 32, borderRadius: '50%', background: '#1A1817', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px', fontWeight: 600 }}>
+                        <div style={{ width: 32, height: 32, borderRadius: '50%', background: isDark ? '#832F46' : '#1A1817', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px', fontWeight: 600 }}>
                           {c.nombre?.charAt(0) || 'C'}
                         </div>
                         <div>
-                          <div style={{ fontSize: '13px', fontWeight: 600, color: '#2B2623' }}>{c.nombre}</div>
-                          <div style={{ fontSize: '11px', color: '#8C857B' }}>{c.telefono} • {c.email}</div>
+                          <div style={{ fontSize: '13px', fontWeight: 600, color: textPrimary }}>{c.nombre}</div>
+                          <div style={{ fontSize: '11px', color: textMuted }}>{c.telefono} • {c.email}</div>
                         </div>
                       </div>
                       <span className="badge badge-concierge" style={{ fontSize: '10px' }}>Cliente</span>
@@ -269,7 +277,7 @@ export function GlobalSearchModal({ isOpen, onClose, onSelectReservation }) {
               {/* Reservas */}
               {filteredCitas.length > 0 && (
                 <div style={{ marginBottom: 16 }}>
-                  <div style={{ fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.15em', color: '#B05B2B', fontWeight: 700, padding: '6px 12px' }}>
+                  <div style={{ fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.15em', color: isDark ? '#F4A5BE' : '#B05B2B', fontWeight: 700, padding: '6px 12px' }}>
                     Reservas ({filteredCitas.length})
                   </div>
                   {filteredCitas.map((cita) => {
@@ -287,18 +295,18 @@ export function GlobalSearchModal({ isOpen, onClose, onSelectReservation }) {
                           borderRadius: '8px',
                           cursor: 'pointer',
                         }}
-                        onMouseEnter={(e) => (e.currentTarget.style.background = '#F9F7F2')}
+                        onMouseEnter={(e) => (e.currentTarget.style.background = hoverBg)}
                         onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
                       >
                         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                          <div style={{ width: 32, height: 32, borderRadius: '8px', background: '#F2EFE9', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                            <Calendar size={16} color="#6B6560" />
+                          <div style={{ width: 32, height: 32, borderRadius: '8px', background: iconBoxBg, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <Calendar size={16} color={iconColor} />
                           </div>
                           <div>
-                            <div style={{ fontSize: '13px', fontWeight: 600, color: '#2B2623' }}>
+                            <div style={{ fontSize: '13px', fontWeight: 600, color: textPrimary }}>
                               {cliente?.nombre || 'Clienta'} — {servicio?.nombre || 'Servicio'}
                             </div>
-                            <div style={{ fontSize: '11px', color: '#8C857B' }}>
+                            <div style={{ fontSize: '11px', color: textMuted }}>
                               Fecha: {cita.fecha} • {cita.hora} hrs
                             </div>
                           </div>
@@ -315,7 +323,7 @@ export function GlobalSearchModal({ isOpen, onClose, onSelectReservation }) {
               {/* Secciones */}
               {filteredSections.length > 0 && (
                 <div>
-                  <div style={{ fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.15em', color: '#B05B2B', fontWeight: 700, padding: '6px 12px' }}>
+                  <div style={{ fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.15em', color: isDark ? '#F4A5BE' : '#B05B2B', fontWeight: 700, padding: '6px 12px' }}>
                     Secciones del Admin
                   </div>
                   {filteredSections.map((sec) => {
@@ -332,16 +340,16 @@ export function GlobalSearchModal({ isOpen, onClose, onSelectReservation }) {
                           borderRadius: '8px',
                           cursor: 'pointer',
                         }}
-                        onMouseEnter={(e) => (e.currentTarget.style.background = '#F9F7F2')}
+                        onMouseEnter={(e) => (e.currentTarget.style.background = hoverBg)}
                         onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
                       >
                         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                          <div style={{ width: 32, height: 32, borderRadius: '8px', background: '#F2EFE9', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                            <IconComponent size={16} color="#6B6560" />
+                          <div style={{ width: 32, height: 32, borderRadius: '8px', background: iconBoxBg, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <IconComponent size={16} color={iconColor} />
                           </div>
-                          <span style={{ fontSize: '13px', fontWeight: 500, color: '#2B2623' }}>{sec.name}</span>
+                          <span style={{ fontSize: '13px', fontWeight: 500, color: textPrimary }}>{sec.name}</span>
                         </div>
-                        <ChevronRight size={14} color="#C4BFB5" />
+                        <ChevronRight size={14} color={textMuted} />
                       </div>
                     );
                   })}
@@ -352,7 +360,7 @@ export function GlobalSearchModal({ isOpen, onClose, onSelectReservation }) {
         </div>
 
         {/* Footer */}
-        <div style={{ padding: '10px 20px', background: '#FAF8F5', borderTop: '1px solid #EAE5DC', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '11px', color: '#A39E93' }}>
+        <div style={{ padding: '10px 20px', background: isDark ? '#15121E' : '#FAF8F5', borderTop: `1px solid ${cardBorder}`, display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '11px', color: textMuted }}>
           <span>Usa los resultados para ir directamente a clientes, reservas o configuración</span>
           <span>Secret Atelier</span>
         </div>

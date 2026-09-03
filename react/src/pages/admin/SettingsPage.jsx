@@ -4,10 +4,14 @@ import { AdminHeader } from '@components/admin/AdminHeader';
 import { Button } from '@components/ui/Button';
 import { Loader } from '@components/ui/Loader';
 import { Toast } from '@components/ui/Toast';
+import { useTheme } from '@context/ThemeContext';
 import adminService from '@services/adminService';
-import { Plus, Edit2, Save, Scissors, Clock, MapPin } from 'lucide-react';
+import { Edit2, Save, Scissors, MapPin } from 'lucide-react';
 
 export default function SettingsPage() {
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
+
   const [servicios, setServicios] = useState([]);
   const [loading, setLoading] = useState(true);
   const [editingId, setEditingId] = useState(null);
@@ -15,6 +19,14 @@ export default function SettingsPage() {
   const [editDuration, setEditDuration] = useState('');
 
   const [toast, setToast] = useState({ message: '', type: 'success' });
+
+  const cardBg = isDark ? '#191622' : '#FFFFFF';
+  const cardBorder = isDark ? '#292336' : '#EAE5DC';
+  const titleColor = isDark ? '#FAF5EF' : '#0D0D0D';
+  const subtitleColor = isDark ? '#8F869A' : '#6B6560';
+  const headerBg = isDark ? '#15121E' : '#FAF8F5';
+  const tableBorder = isDark ? '#292336' : '#EAE5DC';
+  const rowBorder = isDark ? '#262035' : '#F5F2EC';
 
   const loadServicios = async () => {
     try {
@@ -50,7 +62,7 @@ export default function SettingsPage() {
   };
 
   return (
-    <div className="admin-layout" style={{ background: '#FAF8F5' }}>
+    <div className="admin-layout" style={{ background: isDark ? '#0E0D12' : '#FAF8F5' }}>
       <AdminSidebar />
       <div className="admin-content" style={{ padding: '24px 40px 60px' }}>
         <AdminHeader sectionTitle="CONFIGURACIÓN DEL ATELIER" />
@@ -66,23 +78,23 @@ export default function SettingsPage() {
         {!loading && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
             {/* Gestión del Catálogo de Servicios */}
-            <div className="card" style={{ padding: 28, background: '#FFFFFF', borderRadius: 16, border: '1px solid #EAE5DC' }}>
+            <div className="card" style={{ padding: 28, background: cardBg, borderRadius: 16, border: `1px solid ${cardBorder}`, transition: 'all 0.2s ease' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
                 <div>
-                  <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.5rem' }}>
+                  <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.5rem', color: titleColor }}>
                     Catálogo de Tratamientos ({servicios.length})
                   </h3>
-                  <p style={{ fontSize: 12, color: '#6B6560', marginTop: 2 }}>Edita precios y duraciones en tiempo real para las reservas en línea.</p>
+                  <p style={{ fontSize: 12, color: subtitleColor, marginTop: 2 }}>Edita precios y duraciones en tiempo real para las reservas en línea.</p>
                 </div>
               </div>
 
-              <div className="table-container">
-                <table className="table">
+              <div className="table-container" style={{ borderRadius: 12, overflow: 'hidden', border: `1px solid ${tableBorder}` }}>
+                <table className="table" style={{ width: '100%', borderCollapse: 'collapse' }}>
                   <thead>
-                    <tr style={{ background: '#FAF8F5', borderBottom: '1px solid #EAE5DC', fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.15em', color: '#A39E93' }}>
-                      <th style={{ padding: '14px 20px' }}>Tratamiento</th>
-                      <th style={{ padding: '14px 20px' }}>Duración</th>
-                      <th style={{ padding: '14px 20px' }}>Precio (CRC)</th>
+                    <tr style={{ background: headerBg, borderBottom: `1px solid ${tableBorder}`, fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.15em', color: subtitleColor }}>
+                      <th style={{ padding: '14px 20px', textAlign: 'left' }}>Tratamiento</th>
+                      <th style={{ padding: '14px 20px', textAlign: 'left' }}>Duración</th>
+                      <th style={{ padding: '14px 20px', textAlign: 'left' }}>Precio (CRC)</th>
                       <th style={{ padding: '14px 20px', textAlign: 'right' }}>Acciones</th>
                     </tr>
                   </thead>
@@ -90,11 +102,11 @@ export default function SettingsPage() {
                     {servicios.map((s) => {
                       const isEditing = editingId === s.id;
                       return (
-                        <tr key={s.id} style={{ borderBottom: '1px solid #F5F2EC' }}>
-                          <td style={{ padding: '16px 20px', fontWeight: 600, color: '#0D0D0D' }}>
+                        <tr key={s.id} style={{ borderBottom: `1px solid ${rowBorder}`, background: isEditing ? (isDark ? '#231E2E' : '#FDF8F3') : 'transparent' }}>
+                          <td style={{ padding: '16px 20px', fontWeight: 600, color: titleColor }}>
                             {s.nombre}
                           </td>
-                          <td style={{ padding: '16px 20px' }}>
+                          <td style={{ padding: '16px 20px', color: isDark ? '#FAF5EF' : '#2B2623' }}>
                             {isEditing ? (
                               <input
                                 type="number"
@@ -107,7 +119,7 @@ export default function SettingsPage() {
                               `${s.duracion} min`
                             )}
                           </td>
-                          <td style={{ padding: '16px 20px', fontFamily: 'var(--font-serif)', fontWeight: 600 }}>
+                          <td style={{ padding: '16px 20px', fontFamily: 'var(--font-serif)', fontWeight: 600, color: isDark ? '#F4A5BE' : titleColor }}>
                             {isEditing ? (
                               <input
                                 type="number"
@@ -140,29 +152,29 @@ export default function SettingsPage() {
             </div>
 
             {/* Configuración de Sede & Horarios */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
-              <div className="card" style={{ padding: 24, background: '#FFFFFF', borderRadius: 16, border: '1px solid #EAE5DC' }}>
-                <h4 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.25rem', marginBottom: 12 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 24 }}>
+              <div className="card" style={{ padding: 24, background: cardBg, borderRadius: 16, border: `1px solid ${cardBorder}` }}>
+                <h4 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.25rem', marginBottom: 12, color: titleColor }}>
                   Ubicación Principal Sede
                 </h4>
-                <div style={{ fontSize: 13, color: '#6B6560', display: 'flex', flexDirection: 'column', gap: 10 }}>
+                <div style={{ fontSize: 13, color: subtitleColor, display: 'flex', flexDirection: 'column', gap: 10 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                    <MapPin size={16} color="#0D0D0D" /> <strong>Dirección:</strong> Desamparados Centro, San José
+                    <MapPin size={16} color={isDark ? '#F4A5BE' : '#0D0D0D'} /> <strong style={{ color: titleColor }}>Dirección:</strong> Desamparados Centro, San José
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                    <Scissors size={16} color="#0D0D0D" /> <strong>Atención:</strong> Exclusiva con cita previa
+                    <Scissors size={16} color={isDark ? '#F4A5BE' : '#0D0D0D'} /> <strong style={{ color: titleColor }}>Atención:</strong> Exclusiva con cita previa
                   </div>
                 </div>
               </div>
 
-              <div className="card" style={{ padding: 24, background: '#FFFFFF', borderRadius: 16, border: '1px solid #EAE5DC' }}>
-                <h4 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.25rem', marginBottom: 12 }}>
+              <div className="card" style={{ padding: 24, background: cardBg, borderRadius: 16, border: `1px solid ${cardBorder}` }}>
+                <h4 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.25rem', marginBottom: 12, color: titleColor }}>
                   Horarios de Atención
                 </h4>
-                <div style={{ fontSize: 13, color: '#6B6560', display: 'flex', flexDirection: 'column', gap: 6 }}>
-                  <div>• <strong>Lunes a Viernes:</strong> 09:00 AM – 18:00 PM</div>
-                  <div>• <strong>Sábados:</strong> 10:00 AM – 15:00 PM</div>
-                  <div>• <strong>Domingos:</strong> Cerrado (Día de descanso)</div>
+                <div style={{ fontSize: 13, color: subtitleColor, display: 'flex', flexDirection: 'column', gap: 6 }}>
+                  <div>• <strong style={{ color: titleColor }}>Lunes a Viernes:</strong> 09:00 AM – 18:00 PM</div>
+                  <div>• <strong style={{ color: titleColor }}>Sábados:</strong> 10:00 AM – 15:00 PM</div>
+                  <div>• <strong style={{ color: titleColor }}>Domingos:</strong> Cerrado (Día de descanso)</div>
                 </div>
               </div>
             </div>
