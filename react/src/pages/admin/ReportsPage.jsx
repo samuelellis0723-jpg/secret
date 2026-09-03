@@ -1,12 +1,23 @@
-import { AdminSidebar } from '@shared/components/layout/admin-sidebar';
-import useReports from '@features/admin/reports/use-reports';
-import { TopServicesChart } from '@features/admin/reports/components/top-services-chart';
-import { LocalVsDomicilioChart } from '@features/admin/reports/components/local-vs-domicilio-chart';
-import { DemandChart } from '@features/admin/reports/components/demand-chart';
-import { Loader } from '@shared/components/ui/loader';
+import React, { useState, useEffect } from 'react';
+import { AdminSidebar } from '@components/admin/AdminSidebar';
+import { TopServicesChart } from '@components/admin/TopServicesChart';
+import { LocalVsDomicilioChart } from '@components/admin/LocalVsDomicilioChart';
+import { DemandChart } from '@components/admin/DemandChart';
+import { Loader } from '@components/ui/Loader';
+import adminService from '@services/adminService';
 
 export default function ReportsPage() {
-  const { data, loading, error } = useReports();
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    adminService
+      .getReportes()
+      .then(setData)
+      .catch((err) => setError(err?.toString() || 'Error al obtener reportes'))
+      .finally(() => setLoading(false));
+  }, []);
 
   return (
     <div className="admin-layout">
@@ -19,7 +30,7 @@ export default function ReportsPage() {
           <p className="admin-page-subtitle">Métricas y análisis de demanda</p>
         </div>
 
-        {loading && <Loader text="Generando reportes..." />}
+        {loading && <Loader text="Generando reportes del Atelier..." />}
 
         {error && (
           <div style={{ padding: 16, color: 'var(--color-cancelled-text)', fontSize: 13 }}>
