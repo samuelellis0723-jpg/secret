@@ -5,6 +5,7 @@ import { WeekView } from '@components/admin/WeekView';
 import { BlockUnavailableModal } from '@components/admin/BlockUnavailableModal';
 import { Button } from '@components/ui/Button';
 import { Loader } from '@components/ui/Loader';
+import { Toast } from '@components/ui/Toast';
 import adminService from '@services/adminService';
 import { Plus, CalendarDays, Rows3 } from 'lucide-react';
 
@@ -18,6 +19,7 @@ export default function CalendarPage() {
   const [view, setView] = useState('month');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState('');
+  const [toast, setToast] = useState({ message: '', type: 'success' });
 
   const loadCalendarData = async () => {
     try {
@@ -51,11 +53,23 @@ export default function CalendarPage() {
   const handleBlock = async (datos) => {
     try {
       await adminService.createBloqueo(datos);
+      setToast({ message: 'Horario bloqueado con éxito', type: 'success' });
       loadCalendarData();
     } catch (err) {
-      alert('Error al crear bloqueo: ' + err);
+      setToast({ message: 'Error al crear bloqueo: ' + err, type: 'error' });
     }
   };
+
+  const handleDeleteBlock = async (id) => {
+    try {
+      await adminService.deleteBloqueo(id);
+      setToast({ message: 'Horario liberado exitosamente', type: 'info' });
+      loadCalendarData();
+    } catch (err) {
+      setToast({ message: 'Error al liberar el horario: ' + err, type: 'error' });
+    }
+  };
+
 
   return (
     <div className="admin-layout">
@@ -115,6 +129,7 @@ export default function CalendarPage() {
             bloqueos={bloqueos}
             onNextMonth={siguienteMes}
             onPrevMonth={mesAnterior}
+            onDeleteBlock={handleDeleteBlock}
             onSelectDate={(fecha) => {
               setSelectedDate(fecha);
               setIsModalOpen(true);
@@ -127,6 +142,7 @@ export default function CalendarPage() {
             currentMonth={currentMonth}
             citas={citas}
             bloqueos={bloqueos}
+            onDeleteBlock={handleDeleteBlock}
           />
         )}
 
@@ -136,6 +152,13 @@ export default function CalendarPage() {
           onBlock={handleBlock}
           selectedDate={selectedDate}
         />
+
+        <Toast
+          message={toast.message}
+          type={toast.type}
+          onClose={() => setToast({ message: '', type: 'success' })}
+        />
+
       </div>
     </div>
   );

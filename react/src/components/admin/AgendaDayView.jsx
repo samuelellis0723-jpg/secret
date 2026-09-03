@@ -1,15 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StatusBadge } from './StatusBadge';
+import { WhatsAppTemplateModal } from './WhatsAppTemplateModal';
 import { MessageCircle, Check, X, Clock } from 'lucide-react';
 
 export function AgendaDayView({ citasHoy = [], onConfirm, onReject }) {
-  const handleWhatsApp = (telefono, nombre, hora, servicio) => {
-    const cleanPhone = telefono ? telefono.replace(/\D/g, '') : '';
-    const text = encodeURIComponent(
-      `Hola ${nombre}, te saludamos de Secret Manicure Atelier. Confirmamos tu cita para el tratamiento "${servicio}" a las ${hora}. ¡Te esperamos!`
-    );
-    window.open(`https://wa.me/${cleanPhone}?text=${text}`, '_blank');
-  };
+  const [selectedCitaModal, setSelectedCitaModal] = useState(null);
 
   return (
     <div className="card" style={{ marginTop: 24 }}>
@@ -73,17 +68,15 @@ export function AgendaDayView({ citasHoy = [], onConfirm, onReject }) {
               <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                 <StatusBadge estado={cita.estado} />
 
-                {cita.clienteTelefono && (
-                  <button
-                    onClick={() => handleWhatsApp(cita.clienteTelefono, cita.clienteNombre, cita.hora, cita.servicioNombre)}
-                    className="btn btn-sm btn-secondary"
-                    style={{ background: '#25D366', color: 'white', borderColor: '#25D366', gap: 6 }}
-                    title="Enviar mensaje por WhatsApp"
-                  >
-                    <MessageCircle size={14} />
-                    <span>WhatsApp</span>
-                  </button>
-                )}
+                <button
+                  onClick={() => setSelectedCitaModal(cita)}
+                  className="btn btn-sm btn-secondary"
+                  style={{ background: '#25D366', color: 'white', borderColor: '#25D366', gap: 6 }}
+                  title="Enviar mensaje por WhatsApp"
+                >
+                  <MessageCircle size={14} />
+                  <span>WhatsApp</span>
+                </button>
 
                 {cita.estado === 'pendiente' && (
                   <>
@@ -112,8 +105,19 @@ export function AgendaDayView({ citasHoy = [], onConfirm, onReject }) {
           ))}
         </div>
       )}
+
+      {selectedCitaModal && (
+        <WhatsAppTemplateModal
+          isOpen={true}
+          onClose={() => setSelectedCitaModal(null)}
+          cita={selectedCitaModal}
+          cliente={{ nombre: selectedCitaModal.clienteNombre, telefono: selectedCitaModal.clienteTelefono }}
+          servicio={{ nombre: selectedCitaModal.servicioNombre }}
+        />
+      )}
     </div>
   );
 }
 
 export default AgendaDayView;
+

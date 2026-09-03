@@ -17,6 +17,9 @@ export function StatusBadge({ estado, modalidad }) {
     proxima: 'badge-proxima',
     concierge: 'badge-concierge',
     cancelada: 'badge-cancelada',
+    vip: 'badge-local',
+    frecuente: 'badge-proxima',
+    primera_visita: 'badge-completada',
   };
 
   const labels = {
@@ -26,7 +29,11 @@ export function StatusBadge({ estado, modalidad }) {
     proxima: 'Próxima',
     concierge: 'Concierge',
     cancelada: 'Cancelada',
+    vip: '👑 VIP Atelier',
+    frecuente: '⭐ Frecuente',
+    primera_visita: '🌱 Primera Visita',
   };
+
 
   return (
     <span className={`badge ${badgeClasses[estado] || 'badge-pendiente'}`}>

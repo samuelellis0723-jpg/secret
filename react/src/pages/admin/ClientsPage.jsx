@@ -64,8 +64,9 @@ export default function ClientsPage() {
             </div>
 
             <div className="layout-two-col-detail">
-              <ClientHistory cliente={selectedCliente} />
+              <ClientHistory cliente={selectedCliente} onUpdateCliente={fetchClientes} />
             </div>
+
           </div>
         )}
       </div>
