@@ -3,18 +3,24 @@ import { AdminSidebar } from '@components/admin/AdminSidebar';
 import { TodaySummary } from '@components/admin/TodaySummary';
 import { AgendaDayView } from '@components/admin/AgendaDayView';
 import { PendingRequestsWidget } from '@components/admin/PendingRequestsWidget';
-import { MiniCalendar } from '@components/admin/MiniCalendar';
+import { WeeklyOccupancyWidget } from '@components/admin/WeeklyOccupancyWidget';
 import { NewReservationModal } from '@components/admin/NewReservationModal';
-import { Button } from '@components/ui/Button';
+import { BlockUnavailableModal } from '@components/admin/BlockUnavailableModal';
 import { Loader } from '@components/ui/Loader';
+import { Toast } from '@components/ui/Toast';
 import adminService from '@services/adminService';
-import { Plus } from 'lucide-react';
+import { exportToCSV } from '@services/exportService';
+import { Bell, Search, User, Repeat, ChevronRight } from 'lucide-react';
 
 export default function AdminDashboardPage() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
   const [isNewResModalOpen, setIsNewResModalOpen] = useState(false);
+  const [isBlockModalOpen, setIsBlockModalOpen] = useState(false);
+  const [salonActive, setSalonActive] = useState(true);
+  const [toast, setToast] = useState({ message: '', type: 'success' });
 
   const fetchDashboard = async () => {
     try {
@@ -36,78 +42,174 @@ export default function AdminDashboardPage() {
   const handleConfirm = async (id) => {
     try {
       await adminService.updateCitaEstado(id, 'confirmada');
+      setToast({ message: 'Solicitud confirmada con éxito', type: 'success' });
       fetchDashboard();
     } catch (err) {
-      alert('Error al confirmar la cita: ' + err);
+      setToast({ message: 'Error al confirmar: ' + err, type: 'error' });
     }
   };
 
   const handleReject = async (id) => {
     try {
       await adminService.updateCitaEstado(id, 'cancelada');
+      setToast({ message: 'Solicitud rechazada', type: 'info' });
       fetchDashboard();
     } catch (err) {
-      alert('Error al rechazar la cita: ' + err);
+      setToast({ message: 'Error al rechazar: ' + err, type: 'error' });
     }
   };
 
+  const handleFinish = async (id) => {
+    try {
+      await adminService.updateCitaEstado(id, 'completada');
+      setToast({ message: 'Servicio finalizado con éxito', type: 'success' });
+      fetchDashboard();
+    } catch (err) {
+      setToast({ message: 'Error al finalizar servicio: ' + err, type: 'error' });
+    }
+  };
+
+  const handleBlockPersonal = async (datos) => {
+    try {
+      await adminService.createBloqueo(datos);
+      setToast({ message: 'Turno bloqueado con éxito', type: 'success' });
+      setIsBlockModalOpen(false);
+    } catch (err) {
+      setToast({ message: 'Error al bloquear turno: ' + err, type: 'error' });
+    }
+  };
+
+  const handleExportDaily = () => {
+    if (!data) return;
+    exportToCSV(data.citasHoyDetalle, `cierre-agenda-${new Date().toISOString().split('T')[0]}.csv`);
+    setToast({ message: 'Resumen del día exportado a CSV', type: 'success' });
+  };
+
   return (
-    <div className="admin-layout">
+    <div className="admin-layout" style={{ background: '#FAF8F5' }}>
       <AdminSidebar />
-      <div className="admin-content">
-        <div
-          className="admin-page-header"
-          style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 12 }}
-        >
-          <div>
-            <h1 className="admin-page-title">
-              Bienvenida, <em>Valentina</em>
-            </h1>
-            <p className="admin-page-subtitle">Resumen del día y cronograma de atención</p>
+      <div className="admin-content" style={{ padding: '24px 40px 60px' }}>
+        {/* TOP BAR / BREADCRUMB */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24, borderBottom: '1px solid #EAE5DC', paddingBottom: 16 }}>
+          <div style={{ fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.2em', color: '#A39E93', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 6 }}>
+            <span>SECRET ATELIER</span> <ChevronRight size={12} /> <span>ADMINISTRACIÓN</span>
           </div>
 
-          <Button
-            variant="primary"
-            size="sm"
-            icon={Plus}
-            onClick={() => setIsNewResModalOpen(true)}
-          >
-            + Nueva Reserva
-          </Button>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+            <button className="btn btn-ghost btn-sm" style={{ padding: 6 }}>
+              <Bell size={16} color="#6B6560" />
+            </button>
+            <button className="btn btn-ghost btn-sm" style={{ padding: 6 }}>
+              <Search size={16} color="#6B6560" />
+            </button>
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, background: '#FFFFFF', padding: '4px 12px 4px 6px', borderRadius: 20, border: '1px solid #EAE5DC' }}>
+              <div style={{ width: 24, height: 24, borderRadius: '50%', background: '#0D0D0D', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <User size={14} />
+              </div>
+              <div>
+                <div style={{ fontSize: 11, fontWeight: 600, color: '#0D0D0D' }}>Directora Atelier</div>
+                <div style={{ fontSize: 9, color: '#A39E93' }}>Sede Salamanca</div>
+              </div>
+            </div>
+          </div>
         </div>
 
+        {/* HEADER PRINCIPAL DE BIENVENIDA */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 16, marginBottom: 28 }}>
+          <div>
+            <div style={{ fontSize: 9, textTransform: 'uppercase', letterSpacing: '0.25em', color: '#B05B2B', fontWeight: 700, marginBottom: 4 }}>
+              SAN JOSÉ, COSTA RICA • DESAMPARADOS ATELIER
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+              <h1 className="admin-page-title" style={{ fontSize: '2.5rem', margin: 0 }}>
+                Buenos días, <em>Atelierista</em>
+              </h1>
+              <span className="badge badge-concierge" style={{ fontSize: 11, padding: '4px 12px' }}>
+                Miércoles, 24 de Octubre
+              </span>
+            </div>
+            <p className="admin-page-subtitle" style={{ marginTop: 4 }}>
+              Panel de gestión exclusivo para Secret Nail Atelier. Todo preparado para la sesión de cuidado artesanal de hoy.
+            </p>
+          </div>
+
+          <button
+            onClick={() => setSalonActive(!salonActive)}
+            className="btn btn-secondary"
+            style={{
+              borderRadius: 24,
+              padding: '8px 18px',
+              fontSize: 11,
+              fontWeight: 600,
+              letterSpacing: '0.05em',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 8,
+              background: salonActive ? '#FFFFFF' : '#F5F2EC',
+              border: '1px solid #EAE5DC',
+            }}
+          >
+            <span style={{ width: 8, height: 8, borderRadius: '50%', background: salonActive ? '#2D5A3F' : '#9E3A3A' }} />
+            {salonActive ? 'ACTIVO • ATENDIENDO EN SALÓN' : 'DESCONECTADO'}
+            <Repeat size={13} color="#6B6560" />
+          </button>
+        </div>
+
+        {loading && <Loader text="Cargando el Atelier Privé..." />}
+
+        {error && (
+          <div style={{ padding: 16, color: 'var(--color-cancelled-text)', fontSize: 13, marginBottom: 20 }}>
+            Error: {error}
+          </div>
+        )}
+
+        {data && (
+          <>
+            {/* SUMARIO KPI */}
+            <TodaySummary data={data} />
+
+            {/* GRID PRINCIPAL 2 COLUMNAS */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1.6fr 1fr', gap: 24, alignItems: 'start' }}>
+              <AgendaDayView
+                citasHoy={data.citasHoyDetalle}
+                onConfirm={handleConfirm}
+                onReject={handleReject}
+                onFinish={handleFinish}
+              />
+              <PendingRequestsWidget
+                solicitudes={data.solicitudesPendientesDetalle}
+                onConfirm={handleConfirm}
+                onReject={handleReject}
+                onAddManual={() => setIsNewResModalOpen(true)}
+                onBlockPersonal={() => setIsBlockModalOpen(true)}
+                onExportDaily={handleExportDaily}
+              />
+            </div>
+
+            {/* RITMO SEMANAL OCUPACIÓN */}
+            <WeeklyOccupancyWidget onBlockDescanso={() => setIsBlockModalOpen(true)} />
+          </>
+        )}
+
+        {/* MODALES Y TOAST */}
         <NewReservationModal
           isOpen={isNewResModalOpen}
           onClose={() => setIsNewResModalOpen(false)}
           onReservationCreated={fetchDashboard}
         />
 
+        <BlockUnavailableModal
+          isOpen={isBlockModalOpen}
+          onClose={() => setIsBlockModalOpen(false)}
+          onBlock={handleBlockPersonal}
+        />
 
-        {loading && <Loader text="Cargando el dashboard del Atelier..." />}
-
-        {error && (
-          <div style={{ padding: 16, color: 'var(--color-cancelled-text)', fontSize: 13 }}>
-            Error: {error}
-          </div>
-        )}
-
-        {!loading && data && (
-          <>
-            <TodaySummary data={data} />
-
-            {/* Agenda Cronológica Diaria con WhatsApp y Acciones Rápidas */}
-            <AgendaDayView
-              citasHoy={data.citasHoyDetalle || []}
-              onConfirm={handleConfirm}
-              onReject={handleReject}
-            />
-
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, marginTop: 24 }}>
-              <PendingRequestsWidget pendingCount={data.solicitudesPendientes} />
-              <MiniCalendar proximosDias={data.proximosDias} />
-            </div>
-          </>
-        )}
+        <Toast
+          message={toast.message}
+          type={toast.type}
+          onClose={() => setToast({ message: '', type: 'success' })}
+        />
       </div>
     </div>
   );
