@@ -1,14 +1,34 @@
-import { useState } from 'react';
-import { AdminSidebar } from '@shared/components/layout/admin-sidebar';
-import useClients from '@features/admin/clients/use-clients';
-import { ClientSearch } from '@features/admin/clients/components/client-search';
-import { ClientList } from '@features/admin/clients/components/client-list';
-import { ClientHistory } from '@features/admin/clients/components/client-history';
-import { Loader } from '@shared/components/ui/loader';
+import React, { useState, useEffect } from 'react';
+import { AdminSidebar } from '@components/admin/AdminSidebar';
+import { ClientSearch } from '@components/admin/ClientSearch';
+import { ClientList } from '@components/admin/ClientList';
+import { ClientHistory } from '@components/admin/ClientHistory';
+import { Loader } from '@components/ui/Loader';
+import adminService from '@services/adminService';
 
 export default function ClientsPage() {
-  const { clientes, loading, error, searchQuery, setSearchQuery } = useClients();
+  const [clientes, setClientes] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
+
+  const fetchClientes = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const res = await adminService.searchClientes(searchQuery);
+      setClientes(res);
+    } catch (err) {
+      setError(err?.toString() || 'Error al buscar clientes');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchClientes();
+  }, [searchQuery]);
 
   const selectedCliente = clientes.find((c) => c.id === selectedId);
 

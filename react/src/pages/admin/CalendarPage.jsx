@@ -1,43 +1,75 @@
-import { useState } from 'react';
-import { AdminSidebar } from '@shared/components/layout/admin-sidebar';
-import useCalendar from '@features/admin/calendar/use-calendar';
-import { MonthView } from '@features/admin/calendar/components/month-view';
-import { WeekView } from '@features/admin/calendar/components/week-view';
-import { BlockUnavailableModal } from '@features/admin/calendar/components/block-unavailable-modal';
-import { Button } from '@shared/components/ui/button';
-import { Loader } from '@shared/components/ui/loader';
+import React, { useState, useEffect } from 'react';
+import { AdminSidebar } from '@components/admin/AdminSidebar';
+import { MonthView } from '@components/admin/MonthView';
+import { WeekView } from '@components/admin/WeekView';
+import { BlockUnavailableModal } from '@components/admin/BlockUnavailableModal';
+import { Button } from '@components/ui/Button';
+import { Loader } from '@components/ui/Loader';
+import adminService from '@services/adminService';
 import { Plus, CalendarDays, Rows3 } from 'lucide-react';
 
 export default function CalendarPage() {
-  const {
-    citas,
-    bloqueos,
-    loading,
-    error,
-    currentMonth,
-    siguienteMes,
-    mesAnterior,
-    crearBloqueo,
-  } = useCalendar();
+  const [citas, setCitas] = useState([]);
+  const [bloqueos, setBloqueos] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
+  const [currentMonth, setCurrentMonth] = useState(new Date());
   const [view, setView] = useState('month');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState('');
 
-  const handleBlock = (datos) => {
-    crearBloqueo(datos);
+  const loadCalendarData = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const [citasRes, bloqueosRes] = await Promise.all([
+        adminService.getCitas(),
+        adminService.getBloqueos(),
+      ]);
+      setCitas(citasRes);
+      setBloqueos(bloqueosRes);
+    } catch (err) {
+      setError(err?.toString() || 'Error al cargar calendario');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadCalendarData();
+  }, []);
+
+  const siguienteMes = () => {
+    setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1));
+  };
+
+  const mesAnterior = () => {
+    setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1, 1));
+  };
+
+  const handleBlock = async (datos) => {
+    try {
+      await adminService.createBloqueo(datos);
+      loadCalendarData();
+    } catch (err) {
+      alert('Error al crear bloqueo: ' + err);
+    }
   };
 
   return (
     <div className="admin-layout">
       <AdminSidebar />
       <div className="admin-content">
-        <div className="admin-page-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+        <div
+          className="admin-page-header"
+          style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 12 }}
+        >
           <div>
             <h1 className="admin-page-title">
               <em>Calendario</em> y Disponibilidad
             </h1>
-            <p className="admin-page-subtitle">Gestiona horarios y bloqueos</p>
+            <p className="admin-page-subtitle">Gestiona horarios, turnos y bloqueos</p>
           </div>
 
           <div style={{ display: 'flex', gap: 8 }}>

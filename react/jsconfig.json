@@ -5,11 +5,14 @@
     "moduleResolution": "Bundler",
     "baseUrl": ".",
     "paths": {
-      "@shared/*": ["src/shared/*"],
+      "@components/*": ["src/components/*"],
       "@pages/*": ["src/pages/*"],
-      "@features/*": ["src/features/*"]
+      "@routing/*": ["src/routing/*"],
+      "@services/*": ["src/services/*"],
+      "@context/*": ["src/context/*"]
     },
     "jsx": "react-jsx"
   },
   "include": ["src/**/*"]
 }
+

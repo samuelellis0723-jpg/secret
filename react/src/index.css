@@ -1,0 +1,133 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap');
+
+:root {
+  /* Atelier Brand Colors */
+  --color-ivory: #FAF8F5;
+  --color-cream: #F5F2EC;
+  --color-linen: #EFECE6;
+  --color-sand: #EAE5DC;
+  --color-champagne: #D4C9B5;
+  --color-warm-gray: #A39E93;
+  --color-charcoal: #0D0D0D;
+  --color-ash: #2D2D2D;
+  --color-muted: #6B6560;
+  --color-light-muted: #9C9589;
+
+  /* Badges Atelier Status */
+  /* Pendiente / En Curso -> Terracota Suave */
+  --color-pending-bg: #FDF2E9;
+  --color-pending-text: #B05B2B;
+  --color-pending-border: #F7D8C5;
+
+  /* Confirmada -> Verde Suave */
+  --color-confirmed-bg: #EDF7F2;
+  --color-confirmed-text: #15803D;
+  --color-confirmed-border: #86EFAC;
+
+  /* Completada -> Verde Menta */
+  --color-completed-bg: #EBF5EE;
+  --color-completed-text: #2D5A3F;
+  --color-completed-border: #D1E7D7;
+
+  /* Próxima / Concierge -> Durazno / Beige */
+  --color-concierge-bg: #FDF8EC;
+  --color-concierge-text: #9A7B38;
+  --color-concierge-border: #EEDC9A;
+
+  /* Cancelada -> Rosa Muted */
+  --color-cancelled-bg: #FDF2F2;
+  --color-cancelled-text: #9E3A3A;
+  --color-cancelled-border: #F7CACA;
+
+
+  --font-serif: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-pill: 999px;
+
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.05), 0 2px 4px rgba(0, 0, 0, 0.03);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.06), 0 4px 6px rgba(0, 0, 0, 0.04);
+
+  --transition-fast: 150ms ease;
+  --transition-base: 250ms ease;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  color: var(--color-charcoal);
+  background-color: var(--color-ivory);
+  line-height: 1.6;
+  letter-spacing: 0.01em;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+h1 { font-size: 2rem; }
+h2 { font-size: 1.5rem; }
+h3 { font-size: 1.25rem; }
+
+.label-upper {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--color-warm-gray);
+  font-weight: 500;
+  font-family: var(--font-sans);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+input, select, textarea, button {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-cream);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-champagne);
+  border-radius: var(--radius-pill);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-warm-gray);
+}

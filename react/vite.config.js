@@ -10,9 +10,12 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      '@shared': path.resolve(__dirname, './src/shared'),
+      '@components': path.resolve(__dirname, './src/components'),
       '@pages': path.resolve(__dirname, './src/pages'),
-      '@features': path.resolve(__dirname, './src/features'),
+      '@routing': path.resolve(__dirname, './src/routing'),
+      '@services': path.resolve(__dirname, './src/services'),
+      '@context': path.resolve(__dirname, './src/context'),
     },
   },
 })
+
