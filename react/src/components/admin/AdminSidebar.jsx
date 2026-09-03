@@ -1,5 +1,6 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { useAuth } from '@context/AuthContext';
 import {
   LayoutDashboard,
   CalendarDays,
@@ -7,21 +8,26 @@ import {
   BarChart3,
   Settings,
   Scissors,
+  LogOut,
+  ExternalLink,
+  Circle,
 } from 'lucide-react';
 
 const navItems = [
-  { to: '/admin/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { to: '/admin/reservas', label: 'Reservas', icon: CalendarDays },
-  { to: '/admin/clientes', label: 'Clientes', icon: Users },
+  { to: '/admin/dashboard', label: 'Dashboard Hoy', icon: LayoutDashboard },
+  { to: '/admin/reservas', label: 'Reservas & Solicitudes', icon: CalendarDays },
   { to: '/admin/calendario', label: 'Calendario', icon: CalendarDays },
+  { to: '/admin/clientes', label: 'Clientes', icon: Users },
   { to: '/admin/reportes', label: 'Reportes', icon: BarChart3 },
   { to: '/admin/configuracion', label: 'Ajustes', icon: Settings },
 ];
 
 const sidebarStyle = {
-  width: 220,
-  minHeight: 'calc(100vh - 60px)',
-  background: '#0D0D0D',
+  width: 250,
+  minHeight: '100vh',
+  alignSelf: 'stretch',
+  background: '#FAF8F5',
+  borderRight: '1px solid #EAE5DC',
   display: 'flex',
   flexDirection: 'column',
   padding: '24px 0',
@@ -29,69 +35,97 @@ const sidebarStyle = {
 };
 
 const logoArea = {
-  padding: '0 24px 28px',
-  borderBottom: '1px solid rgba(255,255,255,0.08)',
+  padding: '0 24px 20px',
   marginBottom: 16,
-};
-
-const logoText = {
-  fontFamily: 'var(--font-serif)',
-  fontSize: '1.25rem',
-  color: 'white',
-  fontWeight: 400,
-  letterSpacing: '-0.01em',
-};
-
-const logoSubtext = {
-  fontSize: 9,
-  textTransform: 'uppercase',
-  letterSpacing: '0.25em',
-  color: 'rgba(255,255,255,0.35)',
-  marginTop: 4,
-  fontWeight: 500,
 };
 
 const navListStyle = {
   listStyle: 'none',
-  padding: '0 12px',
+  padding: '0 16px',
   display: 'flex',
   flexDirection: 'column',
-  gap: 2,
+  gap: 6,
 };
 
 const linkBase = {
   display: 'flex',
   alignItems: 'center',
   gap: 12,
-  padding: '10px 14px',
-  borderRadius: 8,
+  padding: '12px 18px',
+  borderRadius: 12,
   fontSize: 13,
-  fontWeight: 400,
-  color: 'rgba(255,255,255,0.5)',
+  fontWeight: 500,
+  color: '#6B6560',
   textDecoration: 'none',
   transition: 'all 150ms ease',
-  letterSpacing: '0.01em',
 };
 
 const linkActive = {
   ...linkBase,
-  background: 'rgba(255,255,255,0.08)',
-  color: 'white',
-  fontWeight: 500,
+  background: '#0D0D0D',
+  color: '#FFFFFF',
+  fontWeight: 600,
 };
 
 export function AdminSidebar() {
+  const { logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
+
   return (
     <aside style={sidebarStyle}>
       <div style={logoArea}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <Scissors size={18} color="white" style={{ opacity: 0.7 }} />
-          <span style={logoText}>Secret</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
+          <div
+            style={{
+              width: 32,
+              height: 32,
+              borderRadius: '50%',
+              background: '#0D0D0D',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <Scissors size={16} color="white" />
+          </div>
+          <div>
+            <div style={{ fontFamily: 'var(--font-serif)', fontSize: '1.2rem', fontWeight: 600, color: '#0D0D0D', lineHeight: 1 }}>
+              SECRET
+            </div>
+            <div style={{ fontSize: 8, textTransform: 'uppercase', letterSpacing: '0.22em', color: '#A39E93', fontWeight: 600 }}>
+              MANAGEMENT PRIVÉ
+            </div>
+          </div>
         </div>
-        <div style={logoSubtext}>Panel de Administración</div>
+
+        {/* Badge status */}
+        <div
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: 6,
+            background: '#FFFFFF',
+            border: '1px solid #EAE5DC',
+            borderRadius: 20,
+            padding: '4px 12px',
+            fontSize: 10,
+            fontWeight: 600,
+            color: '#2D5A3F',
+            letterSpacing: '0.05em',
+            marginTop: 8,
+          }}
+        >
+          <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#2D5A3F' }} />
+          ATELIER ABIERTO
+        </div>
       </div>
 
-      <nav>
+      <nav style={{ flex: 1 }}>
         <ul style={navListStyle}>
           {navItems.map(({ to, label, icon: Icon }) => (
             <li key={to}>
@@ -99,7 +133,7 @@ export function AdminSidebar() {
                 to={to}
                 style={({ isActive }) => (isActive ? linkActive : linkBase)}
               >
-                <Icon size={17} />
+                <Icon size={18} />
                 {label}
               </NavLink>
             </li>
@@ -107,9 +141,36 @@ export function AdminSidebar() {
         </ul>
       </nav>
 
-      <div style={{ marginTop: 'auto', padding: '16px 24px', borderTop: '1px solid rgba(255,255,255,0.08)' }}>
-        <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.25)', letterSpacing: '0.05em' }}>
-          v1.0 · Secret Nails
+      <div style={{ padding: '16px 16px 0', borderTop: '1px solid #EAE5DC', display: 'flex', flexDirection: 'column', gap: 6 }}>
+        <a
+          href="/"
+          target="_blank"
+          rel="noreferrer"
+          style={{ ...linkBase, padding: '10px 14px', fontSize: 12, color: '#6B6560' }}
+        >
+          <ExternalLink size={15} />
+          VER SITIO CLIENTE
+        </a>
+
+        <button
+          onClick={handleLogout}
+          style={{
+            ...linkBase,
+            width: '100%',
+            background: 'none',
+            border: 'none',
+            cursor: 'pointer',
+            padding: '10px 14px',
+            fontSize: 12,
+            color: '#9E3A3A',
+          }}
+        >
+          <LogOut size={15} />
+          Cerrar Sesión
+        </button>
+
+        <div style={{ fontSize: 10, color: '#A39E93', padding: '6px 14px 0', letterSpacing: '0.05em' }}>
+          v2.0 · Secret Management Privé
         </div>
       </div>
     </aside>
