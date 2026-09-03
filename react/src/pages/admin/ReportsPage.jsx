@@ -3,8 +3,12 @@ import { AdminSidebar } from '@components/admin/AdminSidebar';
 import { TopServicesChart } from '@components/admin/TopServicesChart';
 import { LocalVsDomicilioChart } from '@components/admin/LocalVsDomicilioChart';
 import { DemandChart } from '@components/admin/DemandChart';
+import { PeakHoursChart } from '@components/admin/PeakHoursChart';
+import { Button } from '@components/ui/Button';
 import { Loader } from '@components/ui/Loader';
 import adminService from '@services/adminService';
+import { exportToCSV, printPage } from '@services/exportService';
+import { Download, Printer } from 'lucide-react';
 
 export default function ReportsPage() {
   const [data, setData] = useState(null);
@@ -19,15 +23,52 @@ export default function ReportsPage() {
       .finally(() => setLoading(false));
   }, []);
 
+  const handleExportCSV = () => {
+    if (!data) return;
+    const summaryData = [
+      { Métrica: 'Total Citas Registradas', Valor: data.totalCitas },
+      { Métrica: 'Citas Completadas', Valor: data.citasCompletadas },
+      { Métrica: 'Ingresos Totales (CLP)', Valor: data.ingresosTotales },
+      { Métrica: 'Citas en Local Atelier', Valor: data.localVsDomicilio.local },
+      { Métrica: 'Citas A Domicilio', Valor: data.localVsDomicilio.domicilio },
+    ];
+    exportToCSV(summaryData, `reporte-ejecutivo-secret-${new Date().toISOString().split('T')[0]}.csv`);
+  };
+
+
   return (
     <div className="admin-layout">
       <AdminSidebar />
       <div className="admin-content">
-        <div className="admin-page-header">
-          <h1 className="admin-page-title">
-            <em>Reportes</em> Rápidos
-          </h1>
-          <p className="admin-page-subtitle">Métricas y análisis de demanda</p>
+        <div
+          className="admin-page-header"
+          style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 12 }}
+        >
+          <div>
+            <h1 className="admin-page-title">
+              <em>Reportes</em> Rápidos
+            </h1>
+            <p className="admin-page-subtitle">Métricas acumuladas y análisis de demanda</p>
+          </div>
+
+          <div style={{ display: 'flex', gap: 8 }}>
+            <Button
+              variant="secondary"
+              size="sm"
+              icon={Printer}
+              onClick={printPage}
+            >
+              Imprimir Cierre
+            </Button>
+            <Button
+              variant="primary"
+              size="sm"
+              icon={Download}
+              onClick={handleExportCSV}
+            >
+              Exportar CSV
+            </Button>
+          </div>
         </div>
 
         {loading && <Loader text="Generando reportes del Atelier..." />}
@@ -74,10 +115,14 @@ export default function ReportsPage() {
               <LocalVsDomicilioChart data={data.localVsDomicilio} />
             </div>
 
-            <TopServicesChart data={data.topServicios} />
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, marginBottom: 20 }}>
+              <TopServicesChart data={data.topServicios} />
+              <PeakHoursChart data={data.franjasHorarias} />
+            </div>
           </>
         )}
       </div>
+
     </div>
   );
 }

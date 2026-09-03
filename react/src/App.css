@@ -804,6 +804,33 @@
   color: var(--color-warm-gray);
 }
 
+/* ── Print Media Styles ── */
+@media print {
+  aside,
+  .btn,
+  .input-group,
+  .filter-tabs,
+  .modal-overlay {
+    display: none !important;
+  }
+
+  .admin-layout {
+    display: block !important;
+    min-height: auto !important;
+  }
+
+  .admin-content {
+    padding: 0 !important;
+    background: white !important;
+  }
+
+  .card, .summary-card {
+    box-shadow: none !important;
+    border: 1px solid #ccc !important;
+    break-inside: avoid;
+  }
+}
+
 /* ── Responsive ── */
 @media (max-width: 1024px) {
   .layout-two-col {
