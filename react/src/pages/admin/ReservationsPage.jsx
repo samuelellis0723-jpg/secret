@@ -5,6 +5,7 @@ import { ReservationsList } from '@components/admin/ReservationsList';
 import { ReservationDetail } from '@components/admin/ReservationDetail';
 import { ConfirmRejectButtons } from '@components/admin/ConfirmRejectButtons';
 import { Loader } from '@components/ui/Loader';
+import { Toast } from '@components/ui/Toast';
 import adminService from '@services/adminService';
 
 export default function ReservationsPage() {
@@ -16,7 +17,10 @@ export default function ReservationsPage() {
 
   const [filtroEstado, setFiltroEstado] = useState('todas');
   const [filtroModalidad, setFiltroModalidad] = useState('todas');
+  const [busqueda, setBusqueda] = useState('');
   const [selectedId, setSelectedId] = useState(null);
+
+  const [toast, setToast] = useState({ message: '', type: 'success' });
 
   const loadData = async () => {
     try {
@@ -47,6 +51,19 @@ export default function ReservationsPage() {
   const citasFiltradas = citas.filter((c) => {
     if (filtroEstado !== 'todas' && c.estado !== filtroEstado) return false;
     if (filtroModalidad !== 'todas' && c.modalidad !== filtroModalidad) return false;
+
+    if (busqueda.trim()) {
+      const lower = busqueda.toLowerCase();
+      const cliente = getClienteById(c.clienteId);
+      const servicio = getServicioById(c.servicioId);
+
+      const nombreMatch = cliente?.nombre?.toLowerCase().includes(lower);
+      const telMatch = cliente?.telefono?.includes(lower);
+      const servicioMatch = servicio?.nombre?.toLowerCase().includes(lower);
+
+      if (!nombreMatch && !telMatch && !servicioMatch) return false;
+    }
+
     return true;
   });
 
@@ -65,11 +82,14 @@ export default function ReservationsPage() {
   const handleUpdateEstado = async (id, nuevoEstado) => {
     try {
       await adminService.updateCitaEstado(id, nuevoEstado);
+      const labels = { confirmada: 'confirmada', cancelada: 'cancelada', completada: 'marcada como completada' };
+      setToast({ message: `Cita #${id} ${labels[nuevoEstado] || 'actualizada'} con éxito`, type: 'success' });
       loadData();
     } catch (err) {
-      alert('Error al actualizar el estado: ' + err);
+      setToast({ message: 'Error al actualizar el estado: ' + err, type: 'error' });
     }
   };
+
 
   return (
     <div className="admin-layout">
@@ -87,6 +107,8 @@ export default function ReservationsPage() {
           setFiltroEstado={setFiltroEstado}
           filtroModalidad={filtroModalidad}
           setFiltroModalidad={setFiltroModalidad}
+          busqueda={busqueda}
+          setBusqueda={setBusqueda}
           conteo={conteo}
         />
 
@@ -131,6 +153,13 @@ export default function ReservationsPage() {
             </div>
           </div>
         )}
+
+        <Toast
+          message={toast.message}
+          type={toast.type}
+          onClose={() => setToast({ message: '', type: 'success' })}
+        />
+
       </div>
     </div>
   );

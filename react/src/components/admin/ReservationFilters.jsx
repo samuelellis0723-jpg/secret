@@ -5,6 +5,8 @@ export function ReservationFilters({
   setFiltroEstado,
   filtroModalidad,
   setFiltroModalidad,
+  busqueda,
+  setBusqueda,
   conteo,
 }) {
   const estadoOptions = [
@@ -23,7 +25,18 @@ export function ReservationFilters({
 
   return (
     <div style={{ display: 'flex', gap: 12, alignItems: 'flex-end', flexWrap: 'wrap' }}>
-      <div className="input-group" style={{ minWidth: 200 }}>
+      <div className="input-group" style={{ flex: 1, minWidth: 240 }}>
+        <label className="input-label">Buscar Reserva</label>
+        <input
+          type="text"
+          className="input input-search"
+          placeholder="Buscar por cliente, teléfono o tratamiento..."
+          value={busqueda}
+          onChange={(e) => setBusqueda(e.target.value)}
+        />
+      </div>
+
+      <div className="input-group" style={{ minWidth: 180 }}>
         <label className="input-label">Estado</label>
         <select
           className="select"
@@ -38,7 +51,7 @@ export function ReservationFilters({
         </select>
       </div>
 
-      <div className="input-group" style={{ minWidth: 180 }}>
+      <div className="input-group" style={{ minWidth: 160 }}>
         <label className="input-label">Modalidad</label>
         <select
           className="select"
@@ -55,5 +68,6 @@ export function ReservationFilters({
     </div>
   );
 }
+
 
 export default ReservationFilters;

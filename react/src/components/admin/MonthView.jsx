@@ -8,7 +8,7 @@ const MESES = [
   'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre',
 ];
 
-export function MonthView({ currentMonth, citas, bloqueos, onNextMonth, onPrevMonth, onSelectDate }) {
+export function MonthView({ currentMonth, citas, bloqueos, onNextMonth, onPrevMonth, onSelectDate, onDeleteBlock }) {
   const calendarDays = useMemo(() => {
     const year = currentMonth.getFullYear();
     const month = currentMonth.getMonth();
@@ -100,16 +100,28 @@ export function MonthView({ currentMonth, citas, bloqueos, onNextMonth, onPrevMo
 
               {bloqueosDelDia.map((b, i) => (
                 <div
-                  key={`bloqueo-${i}`}
+                  key={`bloqueo-${b.id || i}`}
                   className="calendar-event"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (window.confirm(`¿Liberar horario bloqueado "${b.motivo}"?`)) {
+                      onDeleteBlock && onDeleteBlock(b.id);
+                    }
+                  }}
                   style={{
                     background: 'var(--color-cancelled-bg)',
                     color: 'var(--color-cancelled-text)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
                   }}
+                  title="Haz clic para liberar este horario"
                 >
-                  {b.motivo}
+                  <span>{b.motivo}</span>
+                  <span style={{ fontSize: 9, opacity: 0.7 }}>✕</span>
                 </div>
               ))}
+
 
               {citasDelDia.slice(0, 3).map((cita) => (
                 <div

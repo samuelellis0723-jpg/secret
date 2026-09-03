@@ -111,6 +111,25 @@ export const adminService = {
     return apiClient.delete(`${ENDPOINTS.bloqueos}/${id}`);
   },
 
+  async updateClienteNotas(id, notas) {
+    return apiClient.patch(`${ENDPOINTS.usuarios}/${id}`, { notas });
+  },
+
+  async getClienteStats(clienteId) {
+    const citas = await this.getCitasByCliente(clienteId);
+    const completadas = citas.filter((c) => c.estado === 'completada').length;
+    let tier = 'primera_visita';
+    if (completadas >= 5) tier = 'vip';
+    else if (completadas >= 2) tier = 'frecuente';
+
+    return {
+      totalCitas: citas.length,
+      completadas,
+      tier,
+    };
+  },
+
+
   async getDashboardData() {
     const [citas, servicios, usuarios] = await Promise.all([
       apiClient.get(ENDPOINTS.citas),

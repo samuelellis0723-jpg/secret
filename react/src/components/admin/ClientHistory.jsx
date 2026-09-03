@@ -1,20 +1,46 @@
 import React, { useState, useEffect } from 'react';
 import adminService from '@services/adminService';
 import { StatusBadge } from './StatusBadge';
-import { Calendar, Clock, FileText, User } from 'lucide-react';
+import { Button } from '@components/ui/Button';
+import { Calendar, Clock, FileText, User, Edit2, Check } from 'lucide-react';
 
-export function ClientHistory({ cliente }) {
+export function ClientHistory({ cliente, onUpdateCliente }) {
   const [citas, setCitas] = useState([]);
+  const [stats, setStats] = useState({ totalCitas: 0, completadas: 0, tier: 'primera_visita' });
   const [loading, setLoading] = useState(false);
+  const [isEditingNotas, setIsEditingNotas] = useState(false);
+  const [notasText, setNotasText] = useState('');
+  const [savingNotas, setSavingNotas] = useState(false);
 
   useEffect(() => {
     if (!cliente) return;
     setLoading(true);
-    adminService
-      .getCitasByCliente(cliente.id)
-      .then(setCitas)
+    setNotasText(cliente.notas || '');
+
+    Promise.all([
+      adminService.getCitasByCliente(cliente.id),
+      adminService.getClienteStats(cliente.id),
+    ])
+      .then(([citasRes, statsRes]) => {
+        setCitas(citasRes);
+        setStats(statsRes);
+      })
       .finally(() => setLoading(false));
   }, [cliente]);
+
+  const handleSaveNotas = async () => {
+    try {
+      setSavingNotas(true);
+      await adminService.updateClienteNotas(cliente.id, notasText);
+      setIsEditingNotas(false);
+      if (onUpdateCliente) onUpdateCliente();
+    } catch (err) {
+      alert('Error al guardar notas: ' + err);
+    } finally {
+      setSavingNotas(false);
+    }
+  };
+
 
   if (!cliente) {
     return (
@@ -29,31 +55,65 @@ export function ClientHistory({ cliente }) {
 
   return (
     <div className="detail-panel">
-      <div style={{ marginBottom: 24 }}>
-        <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.25rem', marginBottom: 4 }}>
-          {cliente.nombre}
-        </h3>
-        <p style={{ fontSize: 12, color: 'var(--color-light-muted)' }}>{cliente.email}</p>
-        <p style={{ fontSize: 12, color: 'var(--color-light-muted)' }}>{cliente.telefono}</p>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 24 }}>
+        <div>
+          <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.25rem', marginBottom: 4 }}>
+            {cliente.nombre}
+          </h3>
+          <p style={{ fontSize: 12, color: 'var(--color-light-muted)' }}>{cliente.email}</p>
+          <p style={{ fontSize: 12, color: 'var(--color-light-muted)' }}>{cliente.telefono}</p>
+        </div>
+        <StatusBadge estado={stats.tier} />
       </div>
 
-      {cliente.notas && (
-        <div style={{
-          background: 'var(--color-cream)',
-          border: '1px solid var(--color-linen)',
-          borderRadius: 'var(--radius-md)',
-          padding: '12px 14px',
-          marginBottom: 24,
-        }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6 }}>
-            <FileText size={12} color="var(--color-warm-gray)" />
+      <div style={{
+        background: 'var(--color-cream)',
+        border: '1px solid var(--color-linen)',
+        borderRadius: 'var(--radius-md)',
+        padding: '14px 16px',
+        marginBottom: 24,
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+            <FileText size={13} color="var(--color-warm-gray)" />
             <span className="label-upper">Notas de Preferencia</span>
           </div>
-          <p style={{ fontSize: 13, color: 'var(--color-muted)', fontStyle: 'italic' }}>
-            {cliente.notas}
-          </p>
+          {!isEditingNotas ? (
+            <button
+              onClick={() => setIsEditingNotas(true)}
+              style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4, fontSize: 12, color: 'var(--color-muted)' }}
+            >
+              <Edit2 size={12} /> Editar
+            </button>
+          ) : (
+            <Button
+              variant="primary"
+              size="sm"
+              icon={Check}
+              disabled={savingNotas}
+              onClick={handleSaveNotas}
+            >
+              Guardar
+            </Button>
+          )}
         </div>
-      )}
+
+        {!isEditingNotas ? (
+          <p style={{ fontSize: 13, color: cliente.notas ? 'var(--color-muted)' : 'var(--color-light-muted)', fontStyle: cliente.notas ? 'italic' : 'normal' }}>
+            {cliente.notas || 'Sin notas registradas para esta clienta. Haz clic en Editar para agregar preferencias.'}
+          </p>
+        ) : (
+          <textarea
+            className="input"
+            rows={3}
+            value={notasText}
+            onChange={(e) => setNotasText(e.target.value)}
+            placeholder="Escribe alergias, tonos favoritos, preferencias..."
+            style={{ fontSize: 13 }}
+          />
+        )}
+      </div>
+
 
       <div className="detail-section">
         <div className="detail-section-title">
