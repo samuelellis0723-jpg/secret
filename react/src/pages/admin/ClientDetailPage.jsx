@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { AdminSidebar } from '@components/admin/AdminSidebar';
+import { AdminHeader } from '@components/admin/AdminHeader';
 import { ClientHistory } from '@components/admin/ClientHistory';
 import { Button } from '@components/ui/Button';
 import { Loader } from '@components/ui/Loader';
@@ -26,6 +27,7 @@ export default function ClientDetailPage() {
     <div className="admin-layout">
       <AdminSidebar />
       <div className="admin-content">
+        <AdminHeader sectionTitle="DETALLE DE CLIENTE" />
         <div className="admin-page-header">
           <Button
             variant="ghost"

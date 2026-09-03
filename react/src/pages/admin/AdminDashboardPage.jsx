@@ -10,7 +10,8 @@ import { Loader } from '@components/ui/Loader';
 import { Toast } from '@components/ui/Toast';
 import adminService from '@services/adminService';
 import { exportToCSV } from '@services/exportService';
-import { Bell, Search, User, Repeat, ChevronRight } from 'lucide-react';
+import { AdminHeader } from '@components/admin/AdminHeader';
+import { Repeat } from 'lucide-react';
 
 export default function AdminDashboardPage() {
   const [data, setData] = useState(null);
@@ -90,30 +91,7 @@ export default function AdminDashboardPage() {
       <AdminSidebar />
       <div className="admin-content" style={{ padding: '24px 40px 60px' }}>
         {/* TOP BAR / BREADCRUMB */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24, borderBottom: '1px solid #EAE5DC', paddingBottom: 16 }}>
-          <div style={{ fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.2em', color: '#A39E93', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 6 }}>
-            <span>SECRET ATELIER</span> <ChevronRight size={12} /> <span>ADMINISTRACIÓN</span>
-          </div>
-
-          <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-            <button className="btn btn-ghost btn-sm" style={{ padding: 6 }}>
-              <Bell size={16} color="#6B6560" />
-            </button>
-            <button className="btn btn-ghost btn-sm" style={{ padding: 6 }}>
-              <Search size={16} color="#6B6560" />
-            </button>
-
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, background: '#FFFFFF', padding: '4px 12px 4px 6px', borderRadius: 20, border: '1px solid #EAE5DC' }}>
-              <div style={{ width: 24, height: 24, borderRadius: '50%', background: '#0D0D0D', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <User size={14} />
-              </div>
-              <div>
-                <div style={{ fontSize: 11, fontWeight: 600, color: '#0D0D0D' }}>Directora Atelier</div>
-                <div style={{ fontSize: 9, color: '#A39E93' }}>Sede Salamanca</div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <AdminHeader sectionTitle="ADMINISTRACIÓN" onRefreshData={fetchDashboard} />
 
         {/* HEADER PRINCIPAL DE BIENVENIDA */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 16, marginBottom: 28 }}>

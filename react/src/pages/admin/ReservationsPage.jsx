@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { AdminSidebar } from '@components/admin/AdminSidebar';
+import { AdminHeader } from '@components/admin/AdminHeader';
 import { ReservationFilters } from '@components/admin/ReservationFilters';
 import { ReservationsList } from '@components/admin/ReservationsList';
 import { ReservationDetail } from '@components/admin/ReservationDetail';
@@ -122,6 +123,7 @@ export default function ReservationsPage() {
     <div className="admin-layout">
       <AdminSidebar />
       <div className="admin-content">
+        <AdminHeader sectionTitle="RESERVAS Y CITAS" onRefreshData={loadData} onSelectReservation={(id) => setSelectedId(id)} />
         <div
           className="admin-page-header"
           style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 12 }}
