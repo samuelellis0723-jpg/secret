@@ -1,96 +1,91 @@
-# 💅 Secret Nail Atelier — Secret Management Privé
+# 💅 SECRET — Gestor de Reservas para Manicura
 
-Plataforma de gestión de lujo y reserva exclusiva para **Secret Nail Atelier**, diseñada para brindar un flujo operativo de alta precisión (*Haute Couture en Uñas*) tanto para clientas como para el equipo administrativo del atelier.
+> **Plataforma de alta precisión y gestión exclusiva (*Haute Couture en Uñas*) para la reserva, control operativo y administración de servicios de manicure.**
 
-![Secret Management Privé](https://img.shields.io/badge/Secret%20Atelier-v2.0-832F46?style=for-the-badge)
-![React](https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react)
-![Vite](https://img.shields.io/badge/Vite-8.2-646CFF?style=for-the-badge&logo=vite)
-![Status](https://img.shields.io/badge/Status-Active-4ADE80?style=for-the-badge)
-
----
-
-## 🌟 Características Principales
-
-### 📱 Portal Público y Clientas
-- **Reserva de Citas en Línea (`/reservar`):** Wizard paso a paso para seleccionar servicios, fecha, hora y modalidad (Local Atelier o servicio Concierge a Domicilio).
-- **Portal de Acceso (`/login` / `/registro`):** Autenticación y registro de clientas.
-- **Panel de Clienta (`/mi-cuenta`):** Consulta de citas agendadas, historial de tratamientos pasados y gestión de perfil.
-
-### 👑 Panel Administrativo (*Secret Management Privé*)
-- **Dashboard Ejecutivo Hoy (`/admin/dashboard`):**
-  - Métricas clave en tiempo real: Citas agendadas, solicitudes por validar, ingresos estimados en Colones (₡ CRC) y próximo bloque libre para desinfección/pausa técnica.
-  - Cronograma diario en línea de tiempo interactiva con badges de estado (*En Curso, Completada, Próxima, Confirmada*).
-  - Bandeja **Inbox Atelier** para aceptar o rechazar solicitudes entrantes de la Web o Bot de WhatsApp.
-  - Accesos rápidos para citas manuales, bloqueo de turnos personales y exportación del cierre diario a CSV.
-- **Gestión de Reservas & Solicitudes (`/admin/reservas`):**
-  - Filtrado por estado (*Pendiente, Confirmada, Completada, Cancelada*) y modalidad (*Local / Domicilio*).
-  - Panel lateral con ficha detallada de la reserva y modal de plantillas de WhatsApp para confirmación directa con la clienta.
-- **Calendario & Disponibilidad (`/admin/calendario`):**
-  - Vista mensual y semanal interactiva.
-  - Bloqueo de turnos por mantenimiento, almuerzo o insumos con liberación de horario en un clic.
-- **Directorio de Clientes (`/admin/clientes`):**
-  - Búsqueda por nombre, teléfono o correo electrónico.
-  - Historial completo de visitas, preferencias técnicas y badges de categoría (*VIP, Cliente Frecuente, Primera Visita*).
-- **Reportes & Analítica (`/admin/reportes`):**
-  - Gráficos de demanda por día de la semana, distribución Local vs Domicilio, top servicios más solicitados y franjas de horas pico.
-  - Exportación de reportes ejecutivos en CSV e impresión del resumen contable.
-- **Ajustes del Atelier (`/admin/configuracion`):**
-  - Gestión en tiempo real del catálogo de tratamientos (edición de duraciones y precios en CRC).
-  - Configuración de horarios operativos y dirección de la sede.
+![Status](https://img.shields.io/badge/Status-Completed-4ADE80?style=for-the-badge)
+![Frontend](https://img.shields.io/badge/Frontend-React%20%7C%20Tailwind-61DAFB?style=for-the-badge&logo=react)
+![Backend](https://img.shields.io/badge/Backend-Node.js%20%7C%20PostgreSQL-339933?style=for-the-badge&logo=nodedotjs)
+![Deploy](https://img.shields.io/badge/Deployment-Vercel%20%7C%20Railway-000000?style=for-the-badge&logo=vercel)
 
 ---
 
-## 🖤 Modo Oscuro Privé (*Luxury Dark Theme*)
+## 📄 Resumen Ejecutivo
 
-La plataforma incluye un sistema de temas dual con conmutación en tiempo real:
-- **Modo Oscuro Privé (Por defecto):** Paleta inspirada en cristales borgoña, obsidiana nocturna (`#0E0D12` / `#191622`) y acentos en rosa rosé (`#F4A5BE` / `#832F46`).
-- **Modo Claro:** Estilo minimalista en tonos marfil, lino y arena (`#FAF8F5`).
-- **Selector de Tema Integrado:** Disponible en la barra superior (`AdminHeader`) mediante el icono **Sol ☀️ / Luna 🌙**.
+**SECRET — Gestor de Reservas para Manicura** es una solución integral orientada a digitalizar, agilizar y elevar la experiencia de atención en estudios de manicure y atención personalizada a domicilio.
 
----
-
-## 🛠️ Herramientas Integradas en Encabezado (`AdminHeader`)
-
-- 🔔 **Notificaciones en Tiempo Real:** Desplegable flotante con las últimas solicitudes pendientes y alertas del atelier, con confirmación o rechazo directo desde la notificación.
-- 🔍 **Búsqueda Global (`Ctrl + K` / `Cmd + K`):** Command Palette interactivo para buscar clientas, reservas o navegar a cualquier sección del sistema al instante.
-- 👤 **Ficha de Usuario:** Indicador de Directora de Atelier y Sede activa.
+### 🎯 Problema que resuelve
+1. **Solapamiento de Agendas y Choque de Citas:** Reemplaza los registros manuales desordenados en cuadernos o chats de mensajería por un motor de disponibilidad en tiempo real.
+2. **Falta de Trazabilidad y Gestión de Clientes:** Elimina la pérdida de historial de tratamientos, preferencias de las clientas y registros de ingresos diarios.
+3. **Pérdida de Tiempo Operativo:** Automatiza la recepción de solicitudes, permitiendo a la manicurista concentrarse en la atención técnica mientras la plataforma gestiona las reservas de sede (*Local Atelier*) y a domicilio (*Concierge*).
 
 ---
 
-## 🚀 Tecnologías Utilizadas
+## 📁 Estructura de Documentación del Proyecto
 
-- **Frontend:** React 18, Vite 8, React Router DOM v6
-- **Iconografía:** Lucide React
-- **Estilos:** CSS3 nativo con Variables CSS y motor de temas dual
-- **Persistencia & Mock API:** REST client con fallback a datos locales (`adminService.js` / JSON-Server)
+Toda la documentación técnica y los entregables del laboratorio de *Vibe Coding* se encuentran estructurados en la carpeta [`docs/`](./docs/):
+
+* 📑 [**01-resumen-y-plan.md**](./docs/01-resumen-y-plan.md): Plan general del proyecto y propuesta de valor.
+* 👥 [**02-roles-y-permisos.md**](./docs/02-roles-y-permisos.md): Especificación de funcionalidades para Cliente Sin Login, Cliente Con Login y Admin/Manicurista.
+* 🛠️ [**03-stack-y-arquitectura.md**](./docs/03-stack-y-arquitectura.md): Arquitectura de software, stack tecnológico (React, Node.js, PostgreSQL, Vercel, Railway) y API REST.
+* 🔄 [**04-flujos-de-usuario.md**](./docs/04-flujos-de-usuario.md): Diagramas y paso a paso de los flujos de reserva y confirmación.
+* 📝 [**05-bitacora-de-prompts.md**](./docs/05-bitacora-de-prompts.md): **Entregable 1** — Registro estructurado por fases del ciclo *Describe → Genera → Revisa → Prueba → Refina*.
+* 🧠 [**06-documento-de-reflexion.md**](./docs/06-documento-de-reflexion.md): **Entregable 2** — Reflexión sobre tiempos, detección de errores de la IA, rol humano vs. IA y evolución del desarrollador.
 
 ---
 
-## 💻 Instalación y Ejecución Local
+## 👥 Roles de Usuario y Permisos
 
-### 1. Clonar el repositorio e instalar dependencias
-```bash
-cd react
-npm install
 ```
-
-### 2. Iniciar el servidor de desarrollo Vite
-```bash
-npm run dev
-```
-Accede a la aplicación en: `http://localhost:5173`
-
-### 3. Iniciar JSON-Server (Opcional para Mock Backend API)
-```bash
-npm run json-server
-```
-
-### 4. Compilar para Producción
-```bash
-npm run build
+                  ┌─────────────────────────────────────────┐
+                  │              ROLES SECRET               │
+                  └────────────────────┬────────────────────┘
+                                       │
+         ┌─────────────────────────────┼─────────────────────────────┐
+         ▼                             ▼                             ▼
+┌──────────────────┐          ┌──────────────────┐          ┌──────────────────┐
+│ Cliente Sin Login│          │ Cliente Con Login│          │Manicurista(Admin)│
+└────────┬─────────┘          └────────┬─────────┘          └────────┬─────────┘
+         │                             │                             │
+         ├─ Ver Catálogo               ├─ Todo lo de Sin Login       ├─ Dashboard Hoy
+         ├─ Consultar Horarios         ├─ Historial de Citas         ├─ Control Reservas
+         └─ Iniciar Reserva            ├─ Gestión de Perfil          ├─ Bloqueo Agenda
+                                       └─ Re-reserva Rápida          ├─ Base Clientes
+                                                                     └─ Analítica/Ajustes
 ```
 
 ---
 
-© **Secret Management Privé** • Protocolo de Reserva & Alta Costura en Uñas  
-*Soporte Concierge: concierge@secretatelier.cr*
+## 🛠️ Stack Tecnológico
+
+```
+[ Frontend: React + Tailwind ] ──── (HTTPS / JSON API) ────> [ Backend: Node.js + Express ]
+             │                                                           │
+       (Hosted on)                                                  (Hosted on)
+             ▼                                                           ▼
+         [ Vercel ]                                                [ Railway ]
+                                                                         │
+                                                                         ▼
+                                                                [ PostgreSQL Database ]
+```
+
+---
+
+## 🔄 Flujos Principales del Sistema
+
+### 1. 📅 Flujo de Solicitud de Cita (Cliente)
+1. **Selección de Servicio:** Elección de tratamientos del catálogo.
+2. **Modalidad:** Sede Atelier o atención Concierge a Domicilio.
+3. **Franja Horaria:** Selección de fecha y hora disponible.
+4. **Datos de Contacto:** Ingreso de datos del cliente o login.
+5. **Confirmación Inicial:** Envío de solicitud en estado **`Pendiente`**.
+
+### 2. ⚡ Flujo de Confirmación (Admin / Manicurista)
+1. **Notificación:** Recepción de solicitud en Inbox Atelier.
+2. **Validación:** Verificación de tiempos y logística.
+3. **Resolución:** Aprobación (**`Confirmada`**) o Ajuste con envío automático de plantilla por WhatsApp/Correo.
+4. **Cierre:** Cambio a **`Completada`** al finalizar el servicio.
+
+---
+
+© **SECRET — Gestor de Reservas para Manicura**  
+*Documentación técnica oficial.*
