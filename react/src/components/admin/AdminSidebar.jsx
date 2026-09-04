@@ -2,6 +2,7 @@ import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '@context/AuthContext';
 import { useTheme } from '@context/ThemeContext';
+import { useAtelier } from '@context/AtelierContext';
 import {
   LayoutDashboard,
   CalendarDays,
@@ -27,6 +28,7 @@ const navItems = [
 export function AdminSidebar() {
   const { logout } = useAuth();
   const { theme, toggleTheme } = useTheme();
+  const { salonActive, toggleSalonActive } = useAtelier();
   const navigate = useNavigate();
 
   const isDark = theme === 'dark';
@@ -109,19 +111,32 @@ export function AdminSidebar() {
 
         {/* Status Badge */}
         <div
+          onClick={toggleSalonActive}
+          title="Haz clic para cambiar el estado del atelier"
           style={{
             display: 'inline-flex',
             alignItems: 'center',
             gap: 6,
-            background: isDark ? '#143527' : '#FFFFFF',
-            border: `1px solid ${isDark ? '#22573F' : '#EAE5DC'}`,
+            background: salonActive
+              ? (isDark ? '#143527' : '#FFFFFF')
+              : (isDark ? '#26212B' : '#F3F0EA'),
+            border: `1px solid ${
+              salonActive
+                ? (isDark ? '#22573F' : '#EAE5DC')
+                : (isDark ? '#3D3547' : '#E2DDD3')
+            }`,
             borderRadius: 20,
             padding: '4px 12px',
             fontSize: 10,
             fontWeight: 600,
-            color: isDark ? '#4ADE80' : '#2D5A3F',
+            color: salonActive
+              ? (isDark ? '#4ADE80' : '#2D5A3F')
+              : (isDark ? '#9D95A8' : '#78726A'),
             letterSpacing: '0.05em',
             marginTop: 4,
+            cursor: 'pointer',
+            userSelect: 'none',
+            transition: 'all 0.2s ease',
           }}
         >
           <span
@@ -129,11 +144,13 @@ export function AdminSidebar() {
               width: 6,
               height: 6,
               borderRadius: '50%',
-              background: isDark ? '#4ADE80' : '#2D5A3F',
-              boxShadow: isDark ? '0 0 6px #4ADE80' : 'none',
+              background: salonActive
+                ? (isDark ? '#4ADE80' : '#2D5A3F')
+                : (isDark ? '#6E6578' : '#9E978F'),
+              boxShadow: salonActive && isDark ? '0 0 6px #4ADE80' : 'none',
             }}
           />
-          ATELIER ABIERTO
+          {salonActive ? 'ATELIER ABIERTO' : 'DESCONECTADO'}
         </div>
       </div>
 

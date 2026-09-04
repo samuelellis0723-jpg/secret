@@ -3,10 +3,12 @@ import { Bell, Search, User, ChevronRight, Moon, Sun } from 'lucide-react';
 import { NotificationsModal } from './NotificationsModal';
 import { GlobalSearchModal } from './GlobalSearchModal';
 import { useTheme } from '@context/ThemeContext';
+import { useAtelier } from '@context/AtelierContext';
 import adminService from '@services/adminService';
 
 export function AdminHeader({ sectionTitle = 'ADMINISTRACIÓN', onRefreshData, onSelectReservation }) {
   const { theme, toggleTheme } = useTheme();
+  const { salonActive, toggleSalonActive } = useAtelier();
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
@@ -79,25 +81,47 @@ export function AdminHeader({ sectionTitle = 'ADMINISTRACIÓN', onRefreshData, o
 
         {/* Action Controls & Profile Pill - Consistent structure in both modes */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          {/* Status Pill Badge - Styled appropriately per theme */}
+          {/* Status Pill Badge - Styled appropriately per theme and state */}
           <div
+            onClick={toggleSalonActive}
+            title="Haz clic para cambiar el estado del atelier"
             style={{
               display: 'flex',
               alignItems: 'center',
               gap: 6,
-              background: isDark ? '#471D2B' : '#FDF2E9',
-              border: `1px solid ${isDark ? '#66263A' : '#F7D8C5'}`,
+              background: salonActive
+                ? (isDark ? '#471D2B' : '#FDF2E9')
+                : (isDark ? '#26212B' : '#F3F0EA'),
+              border: `1px solid ${
+                salonActive
+                  ? (isDark ? '#66263A' : '#F7D8C5')
+                  : (isDark ? '#3D3547' : '#E2DDD3')
+              }`,
               borderRadius: 20,
               padding: '4px 12px',
               fontSize: 9,
               fontWeight: 700,
               letterSpacing: '0.08em',
-              color: isDark ? '#F4B8CB' : '#B05B2B',
+              color: salonActive
+                ? (isDark ? '#F4B8CB' : '#B05B2B')
+                : (isDark ? '#9D95A8' : '#78726A'),
               marginRight: 6,
+              cursor: 'pointer',
+              userSelect: 'none',
+              transition: 'all 0.2s ease',
             }}
           >
-            <span style={{ width: 6, height: 6, borderRadius: '50%', background: isDark ? '#F4A5BE' : '#B05B2B' }} />
-            ACTIVO • ATENDIENDO EN SALÓN | Suite 01
+            <span
+              style={{
+                width: 6,
+                height: 6,
+                borderRadius: '50%',
+                background: salonActive
+                  ? (isDark ? '#F4A5BE' : '#B05B2B')
+                  : (isDark ? '#6E6578' : '#9E978F'),
+              }}
+            />
+            {salonActive ? 'ACTIVO • ATENDIENDO EN SALÓN | Suite 01' : 'DESCONECTADO | Suite 01'}
           </div>
 
           {/* Theme Toggle Icon Button */}
