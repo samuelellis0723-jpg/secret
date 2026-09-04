@@ -2,6 +2,39 @@
   "usuarios": [],
   "manicurista": [],
   "citas": [],
-  "servicios": [],
+  "servicios": [
+    {
+      "id": "1",
+      "name": "Manicura Rusa de Autor",
+      "description": "Limpieza profunda con torno y nivelación perfecta para un acabado impecable y duradero.",
+      "duration": 90,
+      "price": 22000,
+      "modalities": ["local", "domicilio"]
+    },
+    {
+      "id": "2",
+      "name": "Esmaltado Semipermanente",
+      "description": "Color intenso de larga duración con productos premium amigables con tu uña natural.",
+      "duration": 60,
+      "price": 15000,
+      "modalities": ["local", "domicilio"]
+    },
+    {
+      "id": "3",
+      "name": "Extensión en Gel (Sculpting)",
+      "description": "Alargamiento esculpido a medida sin tips, garantizando resistencia y un look ultra natural.",
+      "duration": 120,
+      "price": 30000,
+      "modalities": ["local"]
+    },
+    {
+      "id": "4",
+      "name": "Spa de Manos Silk",
+      "description": "Tratamiento revitalizante con exfoliación, mascarilla hidratante y masaje relajante.",
+      "duration": 45,
+      "price": 12000,
+      "modalities": ["local", "domicilio"]
+    }
+  ],
   "disponibilidad": []
 }
