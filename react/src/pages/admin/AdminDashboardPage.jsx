@@ -11,16 +11,17 @@ import { Toast } from '@components/ui/Toast';
 import adminService from '@services/adminService';
 import { exportToCSV } from '@services/exportService';
 import { AdminHeader } from '@components/admin/AdminHeader';
+import { useAtelier } from '@context/AtelierContext';
 import { Repeat } from 'lucide-react';
 
 export default function AdminDashboardPage() {
+  const { salonActive, toggleSalonActive } = useAtelier();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   const [isNewResModalOpen, setIsNewResModalOpen] = useState(false);
   const [isBlockModalOpen, setIsBlockModalOpen] = useState(false);
-  const [salonActive, setSalonActive] = useState(true);
   const [toast, setToast] = useState({ message: '', type: 'success' });
 
   const fetchDashboard = async () => {
@@ -113,7 +114,7 @@ export default function AdminDashboardPage() {
           </div>
 
           <button
-            onClick={() => setSalonActive(!salonActive)}
+            onClick={toggleSalonActive}
             className="btn btn-secondary"
             style={{
               borderRadius: 24,
